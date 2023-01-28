@@ -3,6 +3,7 @@ from . import views
 
 app_name = 'diary'
 urlpatterns = [
+    path('', views.IndexView.as_view(), name='index'),
     path('index/', views.IndexView.as_view(), name='index'),
     path('diary_create/', views.DiaryCreateView.as_view(), name='diary_create'),
     path('diary_create_complete/', views.DiaryCreateCompleteView.as_view(), name='diary_create_complete'),
