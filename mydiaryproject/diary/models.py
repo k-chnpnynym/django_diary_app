@@ -8,6 +8,7 @@ class Diary(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date = models.DateField(verbose_name='日付', default=timezone.now)
     title = models.CharField(verbose_name='タイトル', max_length=40)
-    text = models.CharField(verbose_name='本文', max_length=200)
+    text = models.CharField(verbose_name='本文', max_length=200, blank=True)
+    image = models.ImageField(upload_to='media/images/', verbose_name='写真', blank=True, null=True)
     created_at = models.DateTimeField(verbose_name='作成日時', default=timezone.now)
     updated_at = models.DateTimeField(verbose_name='編集日時', blank=True, null=True)

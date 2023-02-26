@@ -33,7 +33,7 @@ class DiaryDetailView(DetailView):
 class DiaryUpdateView(UpdateView):
     template_name = 'diary_update.html'
     model = Diary
-    fields = ('date', 'title', 'text',)
+    fields = ('date', 'title', 'text', 'image')
     success_url = reverse_lazy('diary:diary_list')
 
     def form_valid(self, form):

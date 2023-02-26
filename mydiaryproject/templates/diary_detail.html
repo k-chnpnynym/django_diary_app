@@ -8,6 +8,12 @@
         <p>{{ diary.date }}</p>
         <p>{{ diary.title }}</p>
         <p>{{ diary.text }}</p>
+        {% if diary.image %}
+            <p class="td_image"><img width="500px" height="500px" src="{{ diary.image.url }}"></p>
+        {% else %}
+            <p class="td_image"></p>
+        {% endif %}
+
         <a href="{% url 'diary:diary_update' diary.pk %}">編集</a>
         <a href="{% url 'diary:diary_delete' diary.pk %}">削除</a> <!-- 追加 -->
         <a href="{% url 'diary:index' %}">戻る</a>
