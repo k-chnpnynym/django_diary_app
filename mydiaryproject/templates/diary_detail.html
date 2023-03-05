@@ -1,7 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
         <title>Title</title>
     </head>
     <body>
@@ -9,7 +11,7 @@
         <p>{{ diary.title }}</p>
         <p>{{ diary.text }}</p>
         {% if diary.image %}
-            <p class="td_image"><img width="500px" height="500px" src="{{ diary.image.url }}"></p>
+            <p class="td_image"><img src="{{ diary.image.url }}" style="width: 500px;height: auto;"></p>
         {% else %}
             <p class="td_image"></p>
         {% endif %}
