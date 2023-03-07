@@ -31,6 +31,7 @@ class DiaryListView(LoginRequiredMixin, ListView):
             queryset = queryset.exclude(secret=True)
         return queryset
 
+
 class DiaryDetailView(DetailView):
     template_name = 'diary_detail.html'
     model = Diary
