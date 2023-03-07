@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
@@ -20,10 +21,15 @@ class DiaryCreateCompleteView(TemplateView):
     template_name = 'diary_create_complete.html'
 
 
-class DiaryListView(ListView):
+class DiaryListView(LoginRequiredMixin, ListView):
     template_name = 'diary_list.html'
     model = Diary
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if not self.request.user.is_staff:
+            queryset = queryset.exclude(secret=True)
+        return queryset
 
 class DiaryDetailView(DetailView):
     template_name = 'diary_detail.html'
@@ -35,6 +41,7 @@ class DiaryUpdateView(UpdateView):
     model = Diary
     fields = ('date', 'title', 'text', 'image', 'secret')
     success_url = reverse_lazy('diary:diary_list')
+
 
     def form_valid(self, form):
         diary = form.save(commit=False)
