@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
@@ -16,6 +18,22 @@ class DiaryCreateView(CreateView):
     form_class = DiaryForm
     success_url = reverse_lazy('diary:diary_create_complete' )
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+@login_required
+def diary_create(request):
+    if request.method == 'POST':
+        form = DiaryForm(request.POST, request.FILES)
+        if form.is_valid():
+            diary = form.save(commit=False)
+            diary.save()
+            return redirect('diary:diary_detail', pk=diary.pk)
+    else:
+        form = DiaryForm()
+    return render(request, 'diary_form.html', {'form': form})
 
 class DiaryCreateCompleteView(TemplateView):
     template_name = 'diary_create_complete.html'

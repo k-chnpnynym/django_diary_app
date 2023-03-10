@@ -15,7 +15,7 @@
         {% else %}
             <p class="td_image"></p>
         {% endif %}
-        {% if request.user.is_staff %}
+        {% if request.user.is_staff or request.user == diary.user %}
             <a href="{% url 'diary:diary_update' diary.pk %}">編集</a>
             <a href="{% url 'diary:diary_delete' diary.pk %}">削除</a> <!-- 追加 -->
         {% endif %}

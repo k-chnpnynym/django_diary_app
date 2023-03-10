@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 import uuid
@@ -13,6 +14,6 @@ class Diary(models.Model):
     secret = models.BooleanField(verbose_name='内緒', default=True)
     created_at = models.DateTimeField(verbose_name='作成日時', default=timezone.now)
     updated_at = models.DateTimeField(verbose_name='編集日時', blank=True, null=True)
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
     def __str__(self):
         return f"{self.title} - {self.date}"
