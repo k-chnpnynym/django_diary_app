@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
@@ -5,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
-from .forms import DiaryForm
+from .forms import DiaryForm, DiaryStaffForm
 from .models import Diary
 
 
@@ -58,9 +59,13 @@ class DiaryDetailView(DetailView):
 class DiaryUpdateView(UpdateView):
     template_name = 'diary_update.html'
     model = Diary
-    fields = ('date', 'title', 'text', 'image', 'secret')
+    fields = ('date', 'title', 'text', 'image')
     success_url = reverse_lazy('diary:diary_list')
 
+    def get_form_class(self):
+        if getattr(self.request.user, settings.STAFF_FLAG_ATTR_NAME, False):
+            return DiaryStaffForm
+        return super().get_form_class()
 
     def form_valid(self, form):
         diary = form.save(commit=False)

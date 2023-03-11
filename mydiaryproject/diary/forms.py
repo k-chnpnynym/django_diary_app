@@ -12,3 +12,9 @@ class DiaryForm(forms.ModelForm):
             'text': forms.Textarea(attrs={'class': 'form-control', 'rows': 10}),
         }
 
+
+
+class DiaryStaffForm(forms.ModelForm):
+    class Meta:
+        model = Diary
+        fields = ('date', 'title', 'text', 'image', 'secret')
