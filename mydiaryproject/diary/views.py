@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
@@ -53,6 +52,7 @@ class DiaryListView(LoginRequiredMixin, ListView):
             return Diary.objects.all()
         else:
             return Diary.objects.filter(secret=False)
+
 
 class DiaryListView(LoginRequiredMixin, ListView):
     template_name = 'diary_list.html'
