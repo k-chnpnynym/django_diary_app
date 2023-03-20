@@ -1,7 +1,4 @@
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
@@ -24,17 +21,17 @@ class DiaryCreateView(CreateView):
         return super().form_valid(form)
 
 
-@login_required
-def diary_create(request):
-    if request.method == 'POST':
-        form = DiaryForm(request.POST, request.FILES)
-        if form.is_valid():
-            diary = form.save(commit=False)
-            diary.save()
-            return redirect('diary:diary_detail', pk=diary.pk)
-    else:
-        form = DiaryForm()
-    return render(request, 'diary_form.html', {'form': form})
+# @login_required
+# def diary_create(request):
+#     if request.method == 'POST':
+#         form = DiaryForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             diary = form.save(commit=False)
+#             diary.save()
+#             return redirect('diary:diary_detail', pk=diary.pk)
+#     else:
+#         form = DiaryForm()
+#     return render(request, 'diary_form.html', {'form': form})
 
 class DiaryCreateCompleteView(TemplateView):
     template_name = 'diary_create_complete.html'
@@ -44,11 +41,17 @@ class DiaryListView(LoginRequiredMixin, ListView):
     template_name = 'diary_list.html'
     model = Diary
 
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     if not self.request.user.is_staff:
+    #         queryset = queryset.exclude(secret=True)
+    #     return queryset
+
     def get_queryset(self):
-        queryset = super().get_queryset()
-        if not self.request.user.is_staff:
-            queryset = queryset.exclude(secret=True)
-        return queryset
+        if self.request.user.is_staff:
+            return Diary.objects.all()
+        else:
+            return Diary.objects.filter(secret=False)
 
 
 class DiaryDetailView(DetailView):
@@ -62,8 +65,13 @@ class DiaryUpdateView(UpdateView):
     fields = ('date', 'title', 'text', 'image')
     success_url = reverse_lazy('diary:diary_list')
 
+    # def get_form_class(self):
+    #     if getattr(self.request.user, settings.STAFF_FLAG_ATTR_NAME, False):
+    #         return DiaryStaffForm
+    #     return super().get_form_class()
+
     def get_form_class(self):
-        if getattr(self.request.user, settings.STAFF_FLAG_ATTR_NAME, False):
+        if self.request.user.is_staff:
             return DiaryStaffForm
         return super().get_form_class()
 
