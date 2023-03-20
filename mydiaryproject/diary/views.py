@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
@@ -53,6 +54,31 @@ class DiaryListView(LoginRequiredMixin, ListView):
         else:
             return Diary.objects.filter(secret=False)
 
+class DiaryListView(LoginRequiredMixin, ListView):
+    template_name = 'diary_list.html'
+    model = Diary
+    paginate_by = 2   # 1ページあたりの表示数
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     if not self.request.user.is_staff:
+    #         queryset = queryset.exclude(secret=True)
+    #     return queryset
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Diary.objects.all()
+        else:
+            return Diary.objects.filter(secret=False)
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     diaries = self.get_queryset()
+    #     paginator = Paginator(diaries, self.paginate_by)
+    #     page_number = self.request.GET.get('page')
+    #     page_obj = paginator.get_page(page_number)
+    #     context['page_obj'] = page_obj
+    #     return context
 
 class DiaryDetailView(DetailView):
     template_name = 'diary_detail.html'
