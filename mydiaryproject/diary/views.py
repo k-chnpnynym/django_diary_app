@@ -11,10 +11,15 @@ class IndexView(TemplateView):
     template_name = 'index.html'
 
 
+
 class DiaryCreateView(CreateView):
     template_name = 'diary_create.html'
     form_class = DiaryForm
     success_url = reverse_lazy('diary:diary_create_complete' )
+
+    def get_queryset(self):
+        return Diary.objects.all().select_related('user')
+
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -40,6 +45,7 @@ class DiaryCreateCompleteView(TemplateView):
 class DiaryListView(LoginRequiredMixin, ListView):
     template_name = 'diary_list.html'
     model = Diary
+    paginate_by = 10   # 1ページあたりの表示数
 
     # def get_queryset(self):
     #     queryset = super().get_queryset()
@@ -49,40 +55,18 @@ class DiaryListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            return Diary.objects.all()
+            return Diary.objects.all().select_related('user')
         else:
-            return Diary.objects.filter(secret=False)
+            return Diary.objects.filter(secret=False).select_related('user')
 
 
-class DiaryListView(LoginRequiredMixin, ListView):
-    template_name = 'diary_list.html'
-    model = Diary
-    paginate_by = 2   # 1ページあたりの表示数
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     if not self.request.user.is_staff:
-    #         queryset = queryset.exclude(secret=True)
-    #     return queryset
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Diary.objects.all()
-        else:
-            return Diary.objects.filter(secret=False)
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     diaries = self.get_queryset()
-    #     paginator = Paginator(diaries, self.paginate_by)
-    #     page_number = self.request.GET.get('page')
-    #     page_obj = paginator.get_page(page_number)
-    #     context['page_obj'] = page_obj
-    #     return context
 
 class DiaryDetailView(DetailView):
     template_name = 'diary_detail.html'
     model = Diary
+    def get_queryset(self):
+        return Diary.objects.all().select_related('user')
+
 
 
 class DiaryUpdateView(UpdateView):
@@ -107,8 +91,14 @@ class DiaryUpdateView(UpdateView):
         diary.save()
         return super().form_valid(form)
 
+    def get_queryset(self):
+        return Diary.objects.all().select_related('user')
+
 
 class DiaryDeleteView(DeleteView):
     template_name = 'diary_delete.html'
     model = Diary
     success_url = reverse_lazy('diary:diary_list')
+
+    def get_queryset(self):
+        return Diary.objects.all()#.select_related('user')
