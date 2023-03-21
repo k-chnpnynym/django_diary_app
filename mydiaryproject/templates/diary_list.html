@@ -8,7 +8,8 @@
         {% for diary in diary_list %}
         <p>
             {{ diary.date }}
-            <a href="{% url 'diary:diary_detail' diary.pk %}">{{ diary.title }}</a>
+{#            <a href="{% url 'diary:diary_detail' diary.pk %}">{{ diary.title }}</a>#}
+            <a href="{{ diary.get_absolute_url }}">{{ diary.title }}</a>
             by {{ diary.user }}
         </p>
 

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.shortcuts import resolve_url
 from django.utils import timezone
 import uuid
 
@@ -19,3 +20,7 @@ class Diary(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.date}"
+
+
+    def get_absolute_url(self):
+        return resolve_url('diary:diary_detail', pk=self.pk)
