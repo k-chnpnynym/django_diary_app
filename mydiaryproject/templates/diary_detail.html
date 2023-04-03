@@ -6,7 +6,6 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
         <title>Title</title>
         <p>
-            トピック:&nbsp;
             {% for tag in object.tags.all %}
                 <span><a href="{% url 'diary:diary_tag' tag.slug %}">{{ tag.name }}</a>&nbsp;</span>
             {% endfor %}

@@ -5,19 +5,40 @@
         <title>Title</title>
     </head>
     <body>
+
+
         {% if tag %}
             <h1>{{ tag.name }}</h1>
+        {% else %}
+            <form method="GET" action="{% url 'diary:diary_list' %}">
+                <label for="tag"></label>
+                <select name="tag" id="tag">
+                    <option value="">すべて</option>
+                    {% for tag in tags %}
+                        <option value="{{ tag.slug }}"
+                                {% if tag.slug == selected_tag %} selected {% endif %}>
+                            {{ tag.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit">検索</button>
+            </form>
+
+            {% if selected_tag %}
+                <h1>{{ selected_tag.name }}</h1>
+            {% endif %}
+
         {% endif %}
 
         {% for diary in diary_list %}
-        <p>
-            {{ diary.date }}
-{#            <a href="{% url 'diary:diary_detail' diary.pk %}">{{ diary.title }}</a>#}
-            <a href="{{ diary.get_absolute_url }}">{{ diary.title }}</a>
-            by {{ diary.user }}
-        </p>
-
+            <p>
+                {{ diary.date }}
+                <a href="{{ diary.get_absolute_url }}">{{ diary.title }}</a>
+                by {{ diary.user }}
+            </p>
         {% endfor %}
+
+
         <div>
             <!-- 現在よりも前のページが存在する場合 -->
             {% if page_obj.has_previous %}
