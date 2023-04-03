@@ -1,8 +1,28 @@
 from django.conf import settings
 from django.db import models
 from django.shortcuts import resolve_url
+from django.urls import reverse
 from django.utils import timezone
 import uuid
+
+class Tag(models.Model):
+    """
+    Entry につけられるタグ。
+
+    ひとつの Entry に複数つけられる。
+    また、同じタグを複数の Entry につけることができる。
+
+    unique=True のものフィールドの値は、同一モデル内で重複できない
+    """
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=50, unique=True)
+
+    def __str__(self):
+        return f'タグid:{self.id} - {self.name}'
+
+    def get_absolute_url(self):
+        return reverse('note:tag', args=[self.slug])
+
 
 
 class Diary(models.Model):
@@ -16,6 +36,7 @@ class Diary(models.Model):
     created_at = models.DateTimeField(verbose_name='作成日時', default=timezone.now)
     updated_at = models.DateTimeField(verbose_name='編集日時', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
+    tags = models.ManyToManyField(Tag, blank=True, verbose_name='トピック')
 
 
     def __str__(self):

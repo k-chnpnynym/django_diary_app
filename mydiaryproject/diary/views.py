@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from .forms import DiaryForm, DiaryStaffForm
-from .models import Diary
+from .models import Diary, Tag
 
 
 class IndexView(TemplateView):
@@ -60,19 +60,30 @@ class DiaryListView(LoginRequiredMixin, ListView):
             return Diary.objects.filter(secret=False).select_related('user')
 
 
+class DiaryTagListView(DiaryListView):
+    model = Diary
+
+    def get_queryset(self):
+        return super().get_queryset().filter(tags__slug=self.kwargs['tag'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = Tag.objects.get(slug=self.kwargs['tag'])
+        return context
+
 
 class DiaryDetailView(DetailView):
     template_name = 'diary_detail.html'
     model = Diary
     def get_queryset(self):
-        return Diary.objects.all().select_related('user')
+        return Diary.objects.all().select_related('user').prefetch_related('tags')
 
 
 
 class DiaryUpdateView(UpdateView):
     template_name = 'diary_update.html'
     model = Diary
-    fields = ('date', 'title', 'text', 'image')
+    fields = ('date', 'title', 'text', 'image', 'tags')
     success_url = reverse_lazy('diary:diary_list')
 
     # def get_form_class(self):
