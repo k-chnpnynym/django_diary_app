@@ -45,7 +45,15 @@ class DiaryCreateCompleteView(TemplateView):
 class DiaryListView(LoginRequiredMixin, ListView):
     template_name = 'diary_list.html'
     model = Diary
-    paginate_by = 2   # 1ページあたりの表示数
+    paginate_by = 10   # 1ページあたりの表示数
+
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all()
+        context['selected_tag'] = self.request.GET.get('tag')
+        return context
+
 
 
     # def get_queryset(self):
@@ -54,24 +62,14 @@ class DiaryListView(LoginRequiredMixin, ListView):
     #     else:
     #         return Diary.objects.filter(secret=False).select_related('user')
     def get_queryset(self):
-        queryset = super().get_queryset()#.select_related('user').prefetch_related('tags')
-        if not self.request.user.is_staff:
-            queryset = queryset.exclude(secret=True)
-        return queryset
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tags'] = Tag.objects.all()
-        context['selected_tag'] = self.request.GET.get('tag')
-        return context
-
-    def get_queryset(self):
-        queryset = super().get_queryset().select_related('user').prefetch_related('tags')
+        queryset = super().get_queryset()
+        queryset = queryset.select_related('user').prefetch_related('tags')
         selected_tag = self.request.GET.get('tag')
         if selected_tag:
             queryset = queryset.filter(tags__slug=selected_tag)
+        if not self.request.user.is_staff:
+            queryset = queryset.exclude(secret=True)
         return queryset
-
 
 
 class DiaryTagListView(DiaryListView):
