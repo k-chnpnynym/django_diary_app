@@ -54,7 +54,7 @@ class DiaryListView(LoginRequiredMixin, ListView):
     #     else:
     #         return Diary.objects.filter(secret=False).select_related('user')
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset()#.select_related('user').prefetch_related('tags')
         if not self.request.user.is_staff:
             queryset = queryset.exclude(secret=True)
         return queryset
@@ -66,7 +66,7 @@ class DiaryListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().select_related('user').prefetch_related('tags')
         selected_tag = self.request.GET.get('tag')
         if selected_tag:
             queryset = queryset.filter(tags__slug=selected_tag)
@@ -78,7 +78,7 @@ class DiaryTagListView(DiaryListView):
     model = Diary
 
     def get_queryset(self):
-        return super().get_queryset().filter(tags__slug=self.kwargs['tag'])
+        return super().get_queryset().filter(tags__slug=self.kwargs['tag']).select_related('user').prefetch_related('tags')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
