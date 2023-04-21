@@ -7,10 +7,10 @@ import uuid
 
 class Tag(models.Model):
     """
-    Entry につけられるタグ。
+    Diary につけられるタグ。
 
-    ひとつの Entry に複数つけられる。
-    また、同じタグを複数の Entry につけることができる。
+    ひとつの Diary に複数つけられる。
+    また、同じタグを複数の Diary につけることができる。
 
     unique=True のものフィールドの値は、同一モデル内で重複できない
     """
@@ -21,7 +21,7 @@ class Tag(models.Model):
         return f'{self.name}'
 
     def get_absolute_url(self):
-        return reverse('note:tag', args=[self.slug])
+        return reverse('diary:diary_tag', args=[self.slug])
 
 
 
