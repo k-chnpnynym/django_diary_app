@@ -54,7 +54,7 @@ class Diary(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(verbose_name='作成日時', default=timezone.now)
-    text = models.TextField(verbose_name='本文', max_length=200, blank=True)
+    text = models.TextField(verbose_name='コメント', max_length=200, blank=True)
     diary = models.ForeignKey(Diary, on_delete=models.CASCADE)
 
 

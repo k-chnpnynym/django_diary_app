@@ -1,11 +1,14 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
-from .forms import DiaryForm, DiaryStaffForm
+from .forms import DiaryForm, DiaryStaffForm, DiaryCommentForm
 from .models import Diary, Tag
+
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -94,8 +97,26 @@ class DiaryDetailView(LoginRequiredMixin, DetailView):
     template_name = 'diary_detail.html'
     model = Diary
     def get_queryset(self):
-        return Diary.objects.all().select_related('user').prefetch_related('tags')
+        return Diary.objects.all().select_related('user').prefetch_related('tags', 'comment_set', 'comment_set__user',)
 
+    def post(self, request, *args, **kwargs):
+        form = DiaryCommentForm(request.POST)
+        if form.is_valid():
+            self.object = self.get_object()
+            comment = form.save(commit=False)
+            comment.diary = self.object
+            comment.user = self.request.user  # 要ログイン。ログインユーザ以外によるコメントはここで 500 エラーになる
+            comment.save()
+            messages.info(self.request, 'コメントしました')
+            return redirect(self.request.path)
+        else:
+            messages.info(self.request, 'コメント投稿に失敗しました')
+            return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = DiaryCommentForm()
+        return context
 
 
 class DiaryUpdateView(LoginRequiredMixin, UpdateView):

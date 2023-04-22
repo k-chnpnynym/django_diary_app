@@ -26,5 +26,24 @@
             <a href="{% url 'diary:diary_delete' diary.pk %}">削除</a> <!-- 追加 -->
         {% endif %}
         <a href="{% url 'diary:index' %}">戻る</a>
+
+        <p>{{ object.created_dt|date:'Y/m/d H:i' }}</p>
+        <p>{{ object.body|linebreaksbr }}</p>
+        <div class="diary-comment">
+            {% for comment in object.comment_set.all %}
+                <div class="comment">
+                    <p>{{ comment.created_at|date:'Y/m/d' }}　{{ comment.user }}</p>
+{#                    <p>{{ comment.created_at|date:'Y/m/d H:i' }}</p>#}
+                    <p>{{ comment.text|linebreaksbr }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="コメントする">
+            </form>
+        </div>
     </body>
 </html>
