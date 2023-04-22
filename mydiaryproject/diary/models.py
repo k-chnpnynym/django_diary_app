@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.utils import timezone
 import uuid
 
+
+
 class Tag(models.Model):
     """
     Diary につけられるタグ。
@@ -45,3 +47,14 @@ class Diary(models.Model):
 
     def get_absolute_url(self):
         return resolve_url('diary:diary_detail', pk=self.pk)
+
+
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(verbose_name='作成日時', default=timezone.now)
+    text = models.TextField(verbose_name='本文', max_length=200, blank=True)
+    diary = models.ForeignKey(Diary, on_delete=models.CASCADE)
+
+

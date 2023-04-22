@@ -1,5 +1,5 @@
 from django import forms
-from .models import Diary
+from .models import Diary, Comment
 
 
 class DiaryForm(forms.ModelForm):
@@ -18,3 +18,10 @@ class DiaryStaffForm(forms.ModelForm):
     class Meta:
         model = Diary
         fields = ('date', 'title', 'text', 'image', 'tags', 'secret')
+
+
+
+class DiaryCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text',)

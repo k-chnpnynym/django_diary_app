@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
@@ -7,12 +8,12 @@ from .forms import DiaryForm, DiaryStaffForm
 from .models import Diary, Tag
 
 
-class IndexView(TemplateView):
+class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
 
 
 
-class DiaryCreateView(CreateView):
+class DiaryCreateView(LoginRequiredMixin, CreateView):
     template_name = 'diary_create.html'
     form_class = DiaryForm
     success_url = reverse_lazy('diary:diary_create_complete' )
@@ -38,7 +39,7 @@ class DiaryCreateView(CreateView):
 #         form = DiaryForm()
 #     return render(request, 'diary_form.html', {'form': form})
 
-class DiaryCreateCompleteView(TemplateView):
+class DiaryCreateCompleteView(LoginRequiredMixin, TemplateView):
     template_name = 'diary_create_complete.html'
 
 
@@ -52,6 +53,7 @@ class DiaryListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['tags'] = Tag.objects.all()
         context['selected_tag'] = self.request.GET.get('tag')
+        context['keyword'] = self.request.GET.get('keyword', '')
         return context
 
 
@@ -67,6 +69,10 @@ class DiaryListView(LoginRequiredMixin, ListView):
         selected_tag = self.request.GET.get('tag')
         if selected_tag:
             queryset = queryset.filter(tags__slug=selected_tag)
+        keyword = self.request.GET.get('keyword')
+        if keyword:
+            queryset = queryset.filter(Q(title__icontains=keyword) | Q(text__icontains=keyword))
+
         if not self.request.user.is_staff:
             queryset = queryset.exclude(secret=True)
         return queryset
@@ -84,7 +90,7 @@ class DiaryTagListView(DiaryListView):
         return context
 
 
-class DiaryDetailView(DetailView):
+class DiaryDetailView(LoginRequiredMixin, DetailView):
     template_name = 'diary_detail.html'
     model = Diary
     def get_queryset(self):
@@ -92,7 +98,7 @@ class DiaryDetailView(DetailView):
 
 
 
-class DiaryUpdateView(UpdateView):
+class DiaryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'diary_update.html'
     model = Diary
     fields = ('date', 'title', 'text', 'image', 'tags')
@@ -118,7 +124,7 @@ class DiaryUpdateView(UpdateView):
         return Diary.objects.all().select_related('user')
 
 
-class DiaryDeleteView(DeleteView):
+class DiaryDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'diary_delete.html'
     model = Diary
     success_url = reverse_lazy('diary:diary_list')
