@@ -1,13 +1,28 @@
 {% extends 'base.html' %}
-{% block content %}
-<h1>Diary App by Django</h1>
-{% if user.is_authenticated %}
-    <h2><a href="{% url 'diary:diary_create' %}">日記の投稿</a></h2>
-    <h2><a href="{% url 'diary:diary_list' %}">日記の一覧</a></h2>
-    <p><a href="{% url 'logout' %}">ログアウト</a></p>
-{% else %}
-    <p><a href="{% url 'login' %}">ログイン</a></p>
-{#    <p><a href="{% url 'accounts:signup' %}">新規登録</a></p>#}
-{% endif %}
+{#{% block content %}#}
+{#<h1>Diary App by Django</h1>#}
 
+{% load static %}
+{% load humanize %}
+{% block title %}ホーム{% endblock %}
+{% block extra_css %}
+{% endblock %}
+{% block header_h1 %}ホーム{% endblock %}
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">ホーム</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block main_content %}
+    {% if user.is_authenticated %}
+        <h2><a href="{% url 'diary:diary_create' %}">日記の投稿</a></h2>
+        <h2><a href="{% url 'diary:diary_list' %}">日記の一覧</a></h2>
+        <p><a href="{% url 'logout' %}">ログアウト</a></p>
+    {% else %}
+        <p><a href="{% url 'login' %}">ログイン</a></p>
+    {#    <p><a href="{% url 'accounts:signup' %}">新規登録</a></p>#}
+    {% endif %}
 {% endblock %}

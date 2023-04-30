@@ -1,15 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
-    <body>
-        <h1>日記の削除</h1>
-        <form method="post">
-            {% csrf_token %}
-            <p>{{ diary.date }} {{ diary.title }} を削除します</p>
-            <input type="submit" value="削除">
-        </form>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+    日記削除 - {{ block.super }}
+{% endblock %}
+
+{% block header_h1 %}
+    日記削除
+{% endblock %}
+
+{% block main_content %}
+    <form method="post">
+        {% csrf_token %}
+        <p>以下の日記を削除してもよろしいですか？</p>
+        <h4>{{ diary.title }}</h4>
+        <p>{{ diary.text }}</p>
+        <button type="submit" class="btn btn-danger">はい</button>
+        <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-secondary">いいえ</a>
+    </form>
+{% endblock %}

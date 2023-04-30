@@ -1,4 +1,18 @@
-img {
-    max-width: 100%;
-    height: auto;
+html {
+  margin: 50px auto;
 }
+@media screen and (min-width: 1024px) {
+  html {
+    width: 1024px;
+  }
+}
+
+div.home-img {
+  margin-top: 20px;
+}
+
+div.article-control-area {
+  margin: 20px;
+}
+
+/*# sourceMappingURL=style.css.map */

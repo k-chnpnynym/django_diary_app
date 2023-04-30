@@ -44,9 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'diary',
     'widget_tweaks',  # 追加
-    'bootstrap4', #　追加
+    'django_bootstrap5',
     'accounts.apps.AccountsConfig',
     'debug_toolbar',
     'django_cleanup',

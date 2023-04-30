@@ -1,49 +1,113 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-        <title>Title</title>
-        <p>
-            {% for tag in object.tags.all %}
-                <span><a href="{% url 'diary:diary_tag' tag.slug %}">{{ tag.name }}</a>&nbsp;</span>
-            {% endfor %}
-        </p>
+{% extends "base.html" %}
 
-    </head>
-    <body>
-        <p>{{ diary.date }}</p>
-        <p>{{ diary.title }}</p>
-        <p>{{ diary.text }}</p>
+{% block title %}
+    {{ diary.title }} - {{ block.super }}
+{% endblock %}
+
+{% block header_h1 %}
+    {{ diary.title }}
+{% endblock %}
+
+{% block main_content %}
+{#        <title>Title</title>#}
+
+
+    <p>
+        {% for tag in object.tags.all %}
+            <span><a href="{% url 'diary:diary_tag' tag.slug %}">{{ tag.name }}</a>&nbsp;</span>
+        {% endfor %}
+    </p>
+
+    <div class="card">
+        <div class="card-header">
+            <small class="text-muted">作成日: {{ diary.created_at|date:"Y年m月d日" }}</small>
+            <small class="text-muted">更新日: {{ diary.updated_at|date:"Y年m月d日" }}</small>
+        </div>
         {% if diary.image %}
-            <p class="td_image"><img src="{{ diary.image.url }}" style="width: 500px;height: auto;"></p>
-        {% else %}
-            <p class="td_image"></p>
+            <img src="{{ diary.image.url }}" class="card-img-top" alt="{{ diary.title }}">
         {% endif %}
+        <div class="card-body">
+            <p class="card-text">{{ diary.text }}</p>
+        </div>
+{#        <ul class="list-group list-group-flush">#}
+{#            {% for tag in object.tags.all %}#}
+{#                <li class="list-group-item">{{ tag.name }}</li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
         {% if request.user.is_staff or request.user == diary.user %}
-            <a href="{% url 'diary:diary_update' diary.pk %}">編集</a>
-            <a href="{% url 'diary:diary_delete' diary.pk %}">削除</a> <!-- 追加 -->
+            <div class="article-control-area">
+                <a href="{% url 'diary:diary_update' diary.pk %}" class="btn btn-primary">編集</a>
+                <a href="{% url 'diary:diary_delete' diary.pk %}" class="btn btn-danger">削除</a>
+            </div>
         {% endif %}
-        <a href="{% url 'diary:index' %}">戻る</a>
+    </div>
 
-        <p>{{ object.created_dt|date:'Y/m/d H:i' }}</p>
-        <p>{{ object.body|linebreaksbr }}</p>
-        <div class="diary-comment">
-            {% for comment in object.comment_set.all %}
-                <div class="comment">
-                    <p>{{ comment.created_at|date:'Y/m/d' }}　{{ comment.user }}</p>
+        <a href="{% url 'diary:diary_list' %}">戻る</a>
+{#        <p>{{ diary.date }}</p>#}
+{#        <p>{{ diary.title }}</p>#}
+{#        <p>{{ diary.text }}</p>#}
+{#        {% if diary.image %}#}
+{#            <p class="td_image"><img src="{{ diary.image.url }}" class="card-img-top" alt="{{ diary.title }}"></p>#}
+{##}
+{#        {% else %}#}
+{#            <p class="td_image"></p>#}
+{#        {% endif %}#}
+{#        {% if request.user.is_staff or request.user == diary.user %}#}
+{#            <div class="article-control-area">#}
+{#                <a href="{% url 'diary:diary_update' diary.pk %}" class="btn btn-primary">編集</a>#}
+{#                <a href="{% url 'diary:diary_delete' diary.pk %}" class="btn btn-danger">削除</a>#}
+{#            </div>#}
+{#        {% endif %}#}
+
+
+{#        <p>{{ object.created_at|date:'Y/m/d H:i' }}</p>#}
+{#        <p>{{ object.text|linebreaksbr }}</p>#}
+{#        <div class="diary-comment">#}
+{#            {% for comment in object.comment_set.all %}#}
+{#                <div class="comment">#}
+{#                    <p>{{ comment.created_at|date:'Y/m/d' }}　{{ comment.user }}</p>#}
 {#                    <p>{{ comment.created_at|date:'Y/m/d H:i' }}</p>#}
-                    <p>{{ comment.text|linebreaksbr }}</p>
+{#                    <p>{{ comment.text|linebreaksbr }}</p>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#        <div>#}
+{#            <form method="post">#}
+{#                {% csrf_token %}#}
+{#                {{ form.as_p }}#}
+{#                <input type="submit" value="コメントする">#}
+{#            </form>#}
+{#        </div>#}
+    <h2 class="mt-5">コメント</h2>
+    <hr>
+
+    {% if request.user.is_authenticated %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="comment-text" class="form-label">コメントする</label>
+                <textarea class="form-control" id="comment-text" name="text" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">コメントする</button>
+        </form>
+    {% endif %}
+
+    <div class="mt-5">
+{#        {% if diary.comments.all %}#}
+            {% for comment in object.comment_set.all %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ comment.user }}</h5>
+                        <p class="card-text">{{ comment.text }}</p>
+                        <small class="text-muted"> {{ comment.created_at|date:"Y年m月d日" }}</small>
+                    </div>
                 </div>
+{#            {% empty %}#}
+{#                <p>コメントはありません。</p>#}
             {% endfor %}
-        </div>
-        <div>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="コメントする">
-            </form>
-        </div>
-    </body>
-</html>
+{#        {% else %}#}
+{#            <p>コメントはありません。</p>#}
+{#        {% endif %}#}
+    </div>
+
+{% endblock %}

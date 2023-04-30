@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
@@ -29,18 +29,12 @@ class DiaryCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class
+        context['staff_form'] = DiaryStaffForm
+        return context
 
-# @login_required
-# def diary_create(request):
-#     if request.method == 'POST':
-#         form = DiaryForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             diary = form.save(commit=False)
-#             diary.save()
-#             return redirect('diary:diary_detail', pk=diary.pk)
-#     else:
-#         form = DiaryForm()
-#     return render(request, 'diary_form.html', {'form': form})
 
 class DiaryCreateCompleteView(LoginRequiredMixin, TemplateView):
     template_name = 'diary_create_complete.html'
@@ -109,6 +103,7 @@ class DiaryDetailView(LoginRequiredMixin, DetailView):
             comment.user = self.request.user  # 要ログイン。ログインユーザ以外によるコメントはここで 500 エラーになる
             comment.save()
             messages.info(self.request, 'コメントしました')
+            self.object = self.get_queryset().get(pk=self.object.pk)
             return redirect(self.request.path)
         else:
             messages.info(self.request, 'コメント投稿に失敗しました')
@@ -126,10 +121,7 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
     fields = ('date', 'title', 'text', 'image', 'tags')
     success_url = reverse_lazy('diary:diary_list')
 
-    # def get_form_class(self):
-    #     if getattr(self.request.user, settings.STAFF_FLAG_ATTR_NAME, False):
-    #         return DiaryStaffForm
-    #     return super().get_form_class()
+
 
     def get_form_class(self):
         if self.request.user.is_staff:
@@ -146,10 +138,34 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
         return Diary.objects.all().select_related('user')
 
 
-class DiaryDeleteView(LoginRequiredMixin, DeleteView):
-    template_name = 'diary_delete.html'
-    model = Diary
-    success_url = reverse_lazy('diary:diary_list')
+# class DiaryDeleteView(LoginRequiredMixin, DeleteView):
+#     template_name = 'diary_delete.html'
+#     model = Diary
+#     success_url = reverse_lazy('diary:diary_list')
+#
+#     def get_queryset(self):
+#         return Diary.objects.all()#.select_related('user')
+#
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['diary'] = self.object
+#         return context
 
-    def get_queryset(self):
-        return Diary.objects.all()#.select_related('user')
+class DiaryDeleteView(DeleteView):
+    model = Diary
+    template_name = 'diary_delete.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not request.user == self.object.user:
+            messages.error(request, '日記を削除できるのは投稿者だけです。')
+            return redirect('log:article_list')
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, '日記を削除しました。')
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('dairy:diary_list')
