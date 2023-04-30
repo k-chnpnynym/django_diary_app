@@ -138,7 +138,15 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
         diary = form.save(commit=False)
         diary.updated_at = timezone.now()
         diary.save()
+        messages.success(self.request, '日記を編集しました。')
+
         return super().form_valid(form)
+
+
+    def form_invalid(self, form):
+        messages.error(self.request, '日記を編集できませんでした。')
+        return super().form_invalid(form)
+
 
     def get_queryset(self):
         return Diary.objects.all().select_related('user')
