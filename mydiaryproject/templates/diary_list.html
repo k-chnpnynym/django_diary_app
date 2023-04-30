@@ -36,6 +36,11 @@
                 <a href="{{ diary.get_absolute_url }}">{{ diary.title }}</a>
                 by {{ diary.user }}
             </p>
+            <p>
+                {% if diary.thumbnail %}
+                    <img src="{{ diary.thumbnail.url }}" class="img-fluid">
+                {% endif %}
+            </p>
         {% endfor %}
 
 

@@ -68,13 +68,14 @@ class DiaryListView(LoginRequiredMixin, ListView):
     #         return Diary.objects.filter(secret=False).select_related('user')
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.select_related('user').prefetch_related('tags')
+        queryset = queryset.select_related('user').prefetch_related('tags').order_by('date')
         selected_tag = self.request.GET.get('tag')
         if selected_tag:
             queryset = queryset.filter(tags__slug=selected_tag)
         keyword = self.request.GET.get('keyword')
         if keyword:
-            queryset = queryset.filter(Q(title__icontains=keyword) | Q(text__icontains=keyword))
+            queryset = queryset.filter(Q(title__icontains=keyword) | Q(text__icontains=keyword) |
+                                       Q(date__icontains=keyword) | Q(user__username__icontains=keyword))
 
         if not self.request.user.is_staff:
             queryset = queryset.exclude(secret=True)

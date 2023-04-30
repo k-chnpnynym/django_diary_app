@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'widget_tweaks',  # 追加
     'bootstrap4', #　追加
     'accounts.apps.AccountsConfig',
-    'debug_toolbar'
+    'debug_toolbar',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [

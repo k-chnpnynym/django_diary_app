@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.utils import timezone
 import uuid
 
+from imagekit.models import ImageSpecField
+from pilkit.processors import ResizeToFill
 
 
 class Tag(models.Model):
@@ -39,6 +41,8 @@ class Diary(models.Model):
     updated_at = models.DateTimeField(verbose_name='編集日時', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='トピック')
+    thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(100, 100)], format='JPEG',options={'quality': 60}, )
+
 
 
     def __str__(self):
