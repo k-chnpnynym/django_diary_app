@@ -19,7 +19,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
 class DiaryCreateView(LoginRequiredMixin, CreateView):
     template_name = 'diary_create.html'
     form_class = DiaryForm
-    success_url = reverse_lazy('diary:diary_create_complete' )
+    success_url = reverse_lazy('diary:diary_list' )
 
     def get_queryset(self):
         return Diary.objects.all().select_related('user')
@@ -27,7 +27,13 @@ class DiaryCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        messages.success(self.request, '日記を投稿しました。')
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, '日記を投稿できませんでした。')
+        return super().form_invalid(form)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,7 +49,7 @@ class DiaryCreateCompleteView(LoginRequiredMixin, TemplateView):
 class DiaryListView(LoginRequiredMixin, ListView):
     template_name = 'diary_list.html'
     model = Diary
-    paginate_by = 10   # 1ページあたりの表示数
+    paginate_by = 3   # 1ページあたりの表示数
 
 
     def get_context_data(self, *, object_list=None, **kwargs):
