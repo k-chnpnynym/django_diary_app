@@ -1,4 +1,5 @@
 from django import forms
+
 from .models import Diary, Comment
 
 
@@ -25,3 +26,13 @@ class DiaryCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('text',)
+
+
+
+class CommentEditForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+
+    text = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control', 'placeholder': 'コメントを編集してください。'}))
+    submit = forms.CharField(widget=forms.HiddenInput(), initial='更新')

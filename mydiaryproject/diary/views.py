@@ -1,14 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import redirect
+from django.http import Http404
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from .forms import DiaryForm, DiaryStaffForm, DiaryCommentForm
-from .models import Diary, Tag
-
+from .models import Diary, Tag, Comment
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -166,7 +166,7 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
 #         context['diary'] = self.object
 #         return context
 
-class DiaryDeleteView(DeleteView):
+class DiaryDeleteView(LoginRequiredMixin, DeleteView):
     model = Diary
     template_name = 'diary_delete.html'
 
@@ -174,7 +174,7 @@ class DiaryDeleteView(DeleteView):
         self.object = self.get_object()
         if not request.user == self.object.user:
             messages.error(request, '日記を削除できるのは投稿者だけです。')
-            return redirect('log:article_list')
+            return redirect('diary:diary_list')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -183,3 +183,42 @@ class DiaryDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('dairy:diary_list')
+
+
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
+    # template_name = 'comment_delete.html'
+
+    def get_success_url(self):
+        return reverse('diary:diary_detail', kwargs={'pk': self.object.diary.pk})
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if not obj.user == self.request.user and not self.request.user.is_staff:
+            raise Http404("You do not have permission to access this page.")
+        return obj
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'コメントを削除しました')
+        return super().delete(request, *args, **kwargs)
+
+
+
+class CommentEditView(LoginRequiredMixin, UpdateView):
+    template_name = 'comment_edit.html'
+    model = Comment
+    fields = ['text']
+
+    def get_object(self, queryset=None):
+        comment = super().get_object(queryset)
+        if not (self.request.user.is_staff or self.request.user == comment.user):
+            raise Http404
+        return comment
+
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        comment.user = self.request.user
+        comment.save()
+        messages.success(self.request, 'コメントを編集しました')
+        return redirect('diary:diary_detail', pk=self.object.diary.pk)

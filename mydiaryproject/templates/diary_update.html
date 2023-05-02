@@ -9,6 +9,16 @@
     日記の編集
 {% endblock %}
 
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:index' %}">ホーム</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:diary_list' %}">日記一覧</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:diary_detail' pk=diary.pk %}">日記</a></li>
+            <li class="breadcrumb-item active" aria-current="page">日記編集</li>
+        </ol>
+    </nav>
+{% endblock %}
 
 {% block main_content %}
 <form method="post" enctype="multipart/form-data">
@@ -16,5 +26,5 @@
     {% bootstrap_form form %}
     <input type="submit" value="保存">
 </form>
-<a href="{% url 'diary:diary_list' %}">戻る</a>
+{#<a href="{% url 'diary:diary_list' %}">戻る</a>#}
 {% endblock %}

@@ -8,6 +8,15 @@
     日記リスト
 {% endblock %}
 
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:index' %}">ホーム</a></li>
+            <li class="breadcrumb-item active" aria-current="page">日記一覧</li>
+        </ol>
+    </nav>
+{% endblock %}
+
 {% block main_content %}
     <hr>
 
@@ -58,7 +67,7 @@
                             <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-primary">詳細を見る</a>
                         </div>
                         <div class="card-footer">
-                            <small class="text-muted">{{ diary.created_at|date:"Y年m月d日" }} {{ diary.user }}</small>
+                            <small class="text-muted">{{ diary.created_at|date:"Y年m月d日(D)" }} {{ diary.user }}</small>
                         </div>
                     </div>
                 </div>
@@ -100,6 +109,6 @@
             </ul>
         </nav>
 
-        <a href="{% url 'diary:index' %}">戻る</a>
+{#        <a href="{% url 'diary:index' %}">戻る</a>#}
 {#    </body>#}
 {% endblock %}

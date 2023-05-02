@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 app_name = 'diary'
@@ -12,4 +13,6 @@ urlpatterns = [
     path('diary_update/<uuid:pk>/', views.DiaryUpdateView.as_view(), name='diary_update'),  # 追記
     path('diary_delete/<uuid:pk>/', views.DiaryDeleteView.as_view(), name='diary_delete'),  # 追加
     path('tag/<slug:tag>/', views.DiaryTagListView.as_view(), name='diary_tag'),
+    path('comment/<int:pk>/delete/', views.CommentDeleteView.as_view() , name='comment_delete'),
+    path('comment/<int:pk>/edit/', views.CommentEditView.as_view(), name='comment_edit'),
 ]

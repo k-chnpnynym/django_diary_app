@@ -5,7 +5,18 @@
 {% endblock %}
 
 {% block header_h1 %}
-    {{ diary.title }}
+    {{ diary.title }}　<small>{{ diary.date|date:"Y年m月d日(D)" }}</small>
+{% endblock %}
+
+
+{% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:index' %}">ホーム</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:diary_list' %}">日記一覧</a></li>
+            <li class="breadcrumb-item active" aria-current="page">日記</li>
+        </ol>
+    </nav>
 {% endblock %}
 
 {% block main_content %}
@@ -20,8 +31,9 @@
 
     <div class="card">
         <div class="card-header">
-            <small class="text-muted">作成日: {{ diary.created_at|date:"Y年m月d日" }}</small>
-            <small class="text-muted">更新日: {{ diary.updated_at|date:"Y年m月d日" }}</small>
+            <small class="text-muted">作成日: {{ diary.created_at|date:"Y年m月d日(D)" }}</small>
+            <small class="text-muted">更新日: {{ diary.updated_at|date:"Y年m月d日(D)" }}</small>
+            <small class="text-muted">投稿者: {{ diary.user }}</small>
         </div>
         {% if diary.image %}
             <img src="{{ diary.image.url }}" class="card-img-top" alt="{{ diary.title }}">
@@ -42,7 +54,7 @@
         {% endif %}
     </div>
 
-        <a href="{% url 'diary:diary_list' %}">戻る</a>
+{#        <a href="{% url 'diary:diary_list' %}">戻る</a>#}
 {#        <p>{{ diary.date }}</p>#}
 {#        <p>{{ diary.title }}</p>#}
 {#        <p>{{ diary.text }}</p>#}
@@ -93,18 +105,32 @@
     {% endif %}
 
     <div class="mt-5">
-{#        {% if diary.comments.all %}#}
+{#        {% if diary.comment.all %}#}
+
+
             {% for comment in object.comment_set.all %}
                 <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="card-title d-inline">{{ comment.user }}</h5>
+                        <div class="article-control-area d-inline">
+                            {% if request.user == comment.user %}
+                                <a href="{% url 'diary:comment_edit' comment.pk %}" class="btn btn-primary">編集</a>
+                            {% endif %}
+                            {% if request.user.is_staff or request.user == comment.user %}
+                                <form method="POST" action="{% url 'diary:comment_delete' comment.pk %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">削除</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ comment.user }}</h5>
                         <p class="card-text">{{ comment.text }}</p>
-                        <small class="text-muted"> {{ comment.created_at|date:"Y年m月d日" }}</small>
+                        <small class="text-muted"> {{ comment.created_at|date:"Y年m月d日(D)" }}</small>
                     </div>
                 </div>
-{#            {% empty %}#}
-{#                <p>コメントはありません。</p>#}
             {% endfor %}
+
 {#        {% else %}#}
 {#            <p>コメントはありません。</p>#}
 {#        {% endif %}#}
