@@ -82,17 +82,6 @@ class DiaryListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class DiaryTagView(DiaryListView):
-    model = Diary
-
-    def get_queryset(self):
-        return super().get_queryset().filter(tags__slug=self.kwargs['tag']).select_related('user').prefetch_related('tags')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tag'] = Tag.objects.get(slug=self.kwargs['tag'])
-        return context
-
 
 class DiaryDetailView(LoginRequiredMixin, DetailView):
     template_name = 'diary_detail.html'
@@ -119,6 +108,22 @@ class DiaryDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['form'] = DiaryCommentForm()
         return context
+
+
+
+class DiaryTagView(DiaryListView):
+    model = Diary
+    template_name = 'diary_list_tag.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(tags__slug=self.kwargs['tag']).select_related('user').prefetch_related('tags')
+
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = Tag.objects.get(slug=self.kwargs['tag'])
+        return context
+
 
 
 class DiaryUpdateView(LoginRequiredMixin, UpdateView):

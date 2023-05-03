@@ -25,7 +25,7 @@
 
     <p>
         {% for tag in object.tags.all %}
-            <span><a href="{% url 'diary:diary_tag_list' tag.slug %}">{{ tag.name }}</a>&nbsp;</span>
+            <span><a href="{% url 'diary:diary_tag_list' tag.slug %}" >{{ tag.name }}</a>&nbsp;</span>
         {% endfor %}
     </p>
 
@@ -54,42 +54,6 @@
         {% endif %}
     </div>
 
-{#        <a href="{% url 'diary:diary_list' %}">戻る</a>#}
-{#        <p>{{ diary.date }}</p>#}
-{#        <p>{{ diary.title }}</p>#}
-{#        <p>{{ diary.text }}</p>#}
-{#        {% if diary.image %}#}
-{#            <p class="td_image"><img src="{{ diary.image.url }}" class="card-img-top" alt="{{ diary.title }}"></p>#}
-{##}
-{#        {% else %}#}
-{#            <p class="td_image"></p>#}
-{#        {% endif %}#}
-{#        {% if request.user.is_staff or request.user == diary.user %}#}
-{#            <div class="article-control-area">#}
-{#                <a href="{% url 'diary:diary_update' diary.pk %}" class="btn btn-primary">編集</a>#}
-{#                <a href="{% url 'diary:diary_delete' diary.pk %}" class="btn btn-danger">削除</a>#}
-{#            </div>#}
-{#        {% endif %}#}
-
-
-{#        <p>{{ object.created_at|date:'Y/m/d H:i' }}</p>#}
-{#        <p>{{ object.text|linebreaksbr }}</p>#}
-{#        <div class="diary-comment">#}
-{#            {% for comment in object.comment_set.all %}#}
-{#                <div class="comment">#}
-{#                    <p>{{ comment.created_at|date:'Y/m/d' }}　{{ comment.user }}</p>#}
-{#                    <p>{{ comment.created_at|date:'Y/m/d H:i' }}</p>#}
-{#                    <p>{{ comment.text|linebreaksbr }}</p>#}
-{#                </div>#}
-{#            {% endfor %}#}
-{#        </div>#}
-{#        <div>#}
-{#            <form method="post">#}
-{#                {% csrf_token %}#}
-{#                {{ form.as_p }}#}
-{#                <input type="submit" value="コメントする">#}
-{#            </form>#}
-{#        </div>#}
     <h2 class="mt-5">コメント</h2>
     <hr>
 
@@ -105,8 +69,6 @@
     {% endif %}
 
     <div class="mt-5">
-{#        {% if diary.comment.all %}#}
-
 
             {% for comment in object.comment_set.all %}
                 <div class="card mb-3">
