@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import Http404
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, resolve_url
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
@@ -82,7 +82,7 @@ class DiaryListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class DiaryTagListView(DiaryListView):
+class DiaryTagView(DiaryListView):
     model = Diary
 
     def get_queryset(self):
@@ -222,3 +222,72 @@ class CommentEditView(LoginRequiredMixin, UpdateView):
         comment.save()
         messages.success(self.request, 'コメントを編集しました')
         return redirect('diary:diary_detail', pk=self.object.diary.pk)
+
+
+class TagListView(ListView):
+    model = Tag
+    template_name = 'tag_list.html'
+    context_object_name = 'tags'
+
+
+
+
+class TagCreateView(CreateView):
+    model = Tag
+    template_name = 'tag_create.html'
+    fields = ['name', 'slug']
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(request, 'タグを作成できるのは管理者だけです。')
+            return redirect('diary:tag_list')
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'タグを作成しました。')
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('diary:tag_list')
+
+
+class TagUpdateView(UpdateView):
+    model = Tag
+    template_name = 'tag_update.html'
+    fields = ['name', 'slug']
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(request, 'タグを更新できるのは管理者だけです。')
+            return redirect('diary:diary_list')
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'タグを更新しました。')
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('diary:tag_list')
+
+
+class TagDeleteView(DeleteView):
+    model = Tag
+    template_name = 'tag_delete.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(request, 'タグを削除できるのは管理者だけです。')
+            return redirect('diary:diary_list')
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'タグを削除しました。')
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('diary:tag_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag_list_url'] = resolve_url('diary:tag_list')
+        return context

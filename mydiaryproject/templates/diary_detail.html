@@ -25,7 +25,7 @@
 
     <p>
         {% for tag in object.tags.all %}
-            <span><a href="{% url 'diary:diary_tag' tag.slug %}">{{ tag.name }}</a>&nbsp;</span>
+            <span><a href="{% url 'diary:diary_tag_list' tag.slug %}">{{ tag.name }}</a>&nbsp;</span>
         {% endfor %}
     </p>
 
