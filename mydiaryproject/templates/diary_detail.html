@@ -20,9 +20,6 @@
 {% endblock %}
 
 {% block main_content %}
-{#        <title>Title</title>#}
-
-
     <p>
         {% for tag in object.tags.all %}
             <span><a href="{% url 'diary:diary_tag_list' tag.slug %}" >{{ tag.name }}</a>&nbsp;</span>
@@ -41,11 +38,6 @@
         <div class="card-body">
             <p class="card-text">{{ diary.text }}</p>
         </div>
-{#        <ul class="list-group list-group-flush">#}
-{#            {% for tag in object.tags.all %}#}
-{#                <li class="list-group-item">{{ tag.name }}</li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
         {% if request.user.is_staff or request.user == diary.user %}
             <div class="article-control-area">
                 <a href="{% url 'diary:diary_update' diary.pk %}" class="btn btn-primary">編集</a>
@@ -69,7 +61,7 @@
     {% endif %}
 
     <div class="mt-5">
-
+        {% if diary.comment %}
             {% for comment in object.comment_set.all %}
                 <div class="card mb-3">
                     <div class="card-header">
@@ -93,9 +85,9 @@
                 </div>
             {% endfor %}
 
-{#        {% else %}#}
-{#            <p>コメントはありません。</p>#}
-{#        {% endif %}#}
+        {% else %}
+            <p>コメントはありません。</p>
+        {% endif %}
     </div>
 
 {% endblock %}

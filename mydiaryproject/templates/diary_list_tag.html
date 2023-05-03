@@ -13,7 +13,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:index' %}">ホーム</a></li>
             <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:diary_list' %}">日記一覧</a></li>
-{#            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:diary_detail' pk={{ diary.pk }} %}">日記</a></li>#}
+            <li class="breadcrumb-item"><a href="javascript:history.back()">日記</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ tag.name }}の日記一覧</li>
         </ol>
     </nav>

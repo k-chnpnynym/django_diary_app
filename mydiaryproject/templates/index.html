@@ -22,11 +22,13 @@
         <div class="links">
             <div class="content-list"><a href="{% url 'diary:diary_list' %}">日記一覧</a></div>
         </div>
-        <div class="links">
+        {% if user.is_staff %}
+            <div class="links">
             <div class="content-list"><a href="{% url 'diary:tag_list' %}">タグ一覧</a></div>
+        {% endif %}
         <p><a href="{% url 'logout' %}">ログアウト</a></p>
     {% else %}
         <p><a href="{% url 'login' %}">ログイン</a></p>
-    {#    <p><a href="{% url 'accounts:signup' %}">新規登録</a></p>#}
     {% endif %}
+    {#    <p><a href="{% url 'accounts:signup' %}">新規登録</a></p>#}
 {% endblock %}
