@@ -97,18 +97,18 @@ class DiaryDetailView(LoginRequiredMixin, DetailView):
             comment.diary = self.object
             comment.user = self.request.user  # 要ログイン。ログインユーザ以外によるコメントはここで 500 エラーになる
             comment.save()
-            messages.info(self.request, 'コメントしました')
+            messages.success(self.request, 'コメントしました')
             self.object = self.get_queryset().get(pk=self.object.pk)
             return redirect(self.request.path)
         else:
-            messages.info(self.request, 'コメント投稿に失敗しました')
+            messages.error(self.request, 'コメント投稿に失敗しました')
             return self.get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = DiaryCommentForm()
+        context['object'] = self.get_object()
         return context
-
 
 
 class DiaryTagView(DiaryListView):
@@ -157,19 +157,6 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
         return Diary.objects.all().select_related('user')
 
 
-# class DiaryDeleteView(LoginRequiredMixin, DeleteView):
-#     template_name = 'diary_delete.html'
-#     model = Diary
-#     success_url = reverse_lazy('diary:diary_list')
-#
-#     def get_queryset(self):
-#         return Diary.objects.all()#.select_related('user')
-#
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['diary'] = self.object
-#         return context
 
 class DiaryDeleteView(LoginRequiredMixin, DeleteView):
     model = Diary
@@ -177,9 +164,9 @@ class DiaryDeleteView(LoginRequiredMixin, DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if not request.user == self.object.user:
-            messages.error(request, '日記を削除できるのは投稿者だけです。')
-            return redirect('diary:diary_list')
+        # if not request.user == self.object.user:
+        #     messages.error(request, '日記を削除できるのは投稿者だけです。')
+        #     return redirect('diary:diary_list')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -190,24 +177,31 @@ class DiaryDeleteView(LoginRequiredMixin, DeleteView):
         return reverse('dairy:diary_list')
 
 
-
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
-    # template_name = 'comment_delete.html'
+    template_name = 'comment_delete.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not request.user.is_staff:
+            messages.error(request, 'コメントを削除できるのは管理者だけです。')
+            return redirect('diary:diary_list')
+        return super().dispatch(request, *args, **kwargs)
+
+    # def form_valid(self, form):
+    #     response = super().form_valid(form)
+    #     messages.success(self.request, 'コメントを削除しました。')
+    #     # return super().form_valid(form)
+    #     return response
+
+    def form_valid(self, form):
+        if self.request.POST.get("confirm_delete"):
+            messages.success(self.request, 'コメントを削除しました。')
+        return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('diary:diary_detail', kwargs={'pk': self.object.diary.pk})
-
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset)
-        if not obj.user == self.request.user and not self.request.user.is_staff:
-            raise Http404("You do not have permission to access this page.")
-        return obj
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(request, 'コメントを削除しました')
-        return super().delete(request, *args, **kwargs)
-
+        diary_pk = self.object.diary.pk
+        return reverse('diary:diary_detail', kwargs={'pk': diary_pk})
 
 
 class CommentEditView(LoginRequiredMixin, UpdateView):

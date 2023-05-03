@@ -61,7 +61,7 @@
     {% endif %}
 
     <div class="mt-5">
-        {% if diary.comment %}
+        {% if object.comment_set.all %}
             {% for comment in object.comment_set.all %}
                 <div class="card mb-3">
                     <div class="card-header">
@@ -71,11 +71,9 @@
                                 <a href="{% url 'diary:comment_edit' comment.pk %}" class="btn btn-primary">編集</a>
                             {% endif %}
                             {% if request.user.is_staff or request.user == comment.user %}
-                                <form method="POST" action="{% url 'diary:comment_delete' comment.pk %}" class="d-inline">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger">削除</button>
-                                </form>
+                                 <a href="{% url 'diary:comment_delete' comment.pk %}" class="btn btn-danger">削除</a>
                             {% endif %}
+
                         </div>
                     </div>
                     <div class="card-body">
