@@ -1,12 +1,13 @@
+import uuid
+
 from django.conf import settings
 from django.db import models
 from django.shortcuts import resolve_url
 from django.urls import reverse
 from django.utils import timezone
-import uuid
-
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
+
 
 
 class Tag(models.Model):
@@ -36,14 +37,16 @@ class Diary(models.Model):
     title = models.CharField(verbose_name='タイトル', max_length=40)
     text = models.TextField(verbose_name='本文', max_length=200, blank=True)
     image = models.ImageField(upload_to='media/images/', verbose_name='写真', blank=True, null=True)
+    video = models.FileField(upload_to='media/videos/', verbose_name='動画', blank=True, null=True)  # 動画用のフィールドを追加
+
     secret = models.BooleanField(verbose_name='内緒', default=True)
     created_at = models.DateTimeField(verbose_name='作成日時', default=timezone.now)
     updated_at = models.DateTimeField(verbose_name='編集日時', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='タグ')
     thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(100, 100)], format='JPEG',options={'quality': 60}, )
-
-
+    thumbnail_video = ImageSpecField(source='video', processors=[ResizeToFill(100, 100)], format='JPEG',
+                                     options={'quality': 60}, )
 
     def __str__(self):
         return f"{self.title} - {self.date}"

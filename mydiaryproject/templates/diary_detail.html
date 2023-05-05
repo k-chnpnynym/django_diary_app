@@ -35,6 +35,12 @@
         {% if diary.image %}
             <img src="{{ diary.image.url }}" class="card-img-top" alt="{{ diary.title }}">
         {% endif %}
+        {% if object.video %}
+            <video controls>
+                <source src="{{ object.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        {% endif %}
         <div class="card-body">
             <p class="card-text">{{ diary.text }}</p>
         </div>

@@ -51,7 +51,6 @@ class DiaryListView(LoginRequiredMixin, ListView):
     model = Diary
     paginate_by = 3   # 1ページあたりの表示数
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tags'] = Tag.objects.all()
@@ -80,8 +79,6 @@ class DiaryListView(LoginRequiredMixin, ListView):
         if not self.request.user.is_staff:
             queryset = queryset.exclude(secret=True)
         return queryset
-
-
 
 class DiaryDetailView(LoginRequiredMixin, DetailView):
     template_name = 'diary_detail.html'
@@ -202,6 +199,7 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         diary_pk = self.object.diary.pk
         return reverse('diary:diary_detail', kwargs={'pk': diary_pk})
+
 
 
 class CommentEditView(LoginRequiredMixin, UpdateView):
