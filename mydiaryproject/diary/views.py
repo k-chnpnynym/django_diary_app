@@ -67,7 +67,7 @@ class DiaryListView(LoginRequiredMixin, ListView):
     #         return Diary.objects.filter(secret=False).select_related('user')
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.select_related('user').prefetch_related('tags').order_by('date')
+        queryset = queryset.select_related('user').prefetch_related('tags').order_by('-date')
         selected_tag = self.request.GET.get('tag')
         if selected_tag:
             queryset = queryset.filter(tags__slug=selected_tag)
