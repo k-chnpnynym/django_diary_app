@@ -49,16 +49,23 @@ class DiaryCreateCompleteView(LoginRequiredMixin, TemplateView):
 class DiaryListView(LoginRequiredMixin, ListView):
     template_name = 'diary_list.html'
     model = Diary
-    paginate_by = 10   # 1ページあたりの表示数
+    #paginate_by = 3   # 1ページあたりの表示数
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tags'] = Tag.objects.all()
         context['selected_tag'] = self.request.GET.get('tag')
         context['keyword'] = self.request.GET.get('keyword', '')
+        context['num_diaries'] = self.request.GET.get('num_diaries', '10')
         return context
 
+    def get_paginate_by(self, queryset):
+        num_diaries = self.request.GET.get('num_diaries', '10')
 
+        if num_diaries == 'all':
+            num_diaries = Diary.objects.all().count()
+
+        return num_diaries
 
     # def get_queryset(self):
     #     if self.request.user.is_staff:

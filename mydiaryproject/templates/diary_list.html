@@ -38,6 +38,13 @@
                         </option>
                     {% endfor %}
                 </select>
+                <select name="num_diaries" id="num_diaries">
+                    <option value="5" {% if num_diaries == '5' %} selected {% endif %}>5</option>
+                    <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>
+                    <option value="20" {% if num_diaries == '20' %} selected {% endif %}>20</option>
+                    <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>
+                    <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>
+                </select>
                 <input type="text" name="keyword" value="{{ keyword }}">
                 <button type="submit">Filter</button>
             </form>
