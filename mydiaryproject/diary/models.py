@@ -10,6 +10,7 @@ from pilkit.processors import ResizeToFill
 
 
 
+
 class Tag(models.Model):
     """
     Diary につけられるタグ。

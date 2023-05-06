@@ -49,7 +49,7 @@ class DiaryCreateCompleteView(LoginRequiredMixin, TemplateView):
 class DiaryListView(LoginRequiredMixin, ListView):
     template_name = 'diary_list.html'
     model = Diary
-    paginate_by = 3   # 1ページあたりの表示数
+    paginate_by = 10   # 1ページあたりの表示数
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -127,8 +127,10 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'diary_update.html'
     model = Diary
     fields = ('date', 'title', 'text', 'image', 'tags')
-    success_url = reverse_lazy('diary:diary_list')
 
+    def get_success_url(self):
+        diary_pk = self.object.pk
+        return reverse('diary:diary_detail', kwargs={'pk': diary_pk})
 
 
     def get_form_class(self):

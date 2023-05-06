@@ -30,7 +30,7 @@
         <div class="card-header">
             <small class="text-muted">作成日: {{ diary.created_at|date:"Y年m月d日(D)" }}</small>
             <small class="text-muted">更新日: {{ diary.updated_at|date:"Y年m月d日(D)" }}</small>
-            <small class="text-muted">投稿者: {{ diary.user }}</small>
+            <small class="text-muted">作成者: {{ diary.user }}</small>
         </div>
         {% if diary.image %}
             <img src="{{ diary.image.url }}" class="card-img-top" alt="{{ diary.title }}">
@@ -38,12 +38,19 @@
         {% if object.video %}
             <video controls>
                 <source src="{{ object.video.url }}" type="video/mp4">
-                Your browser does not support the video tag.
+                このブラウザはビデオタグをサポートしていません。
             </video>
         {% endif %}
         <div class="card-body">
             <p class="card-text">{{ diary.text }}</p>
         </div>
+{#        <ul class="list-group list-group-flush">#}
+{#            {% for tag in object.tags.all %}#}
+{#                <li class="list-group-item">#}
+{#                    <a href="{% url 'diary:diary_tag_list' tag.slug %}" >{{ tag.name }}</a>#}
+{#                </li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
         {% if request.user.is_staff or request.user == diary.user %}
             <div class="article-control-area">
                 <a href="{% url 'diary:diary_update' diary.pk %}" class="btn btn-primary">編集</a>
