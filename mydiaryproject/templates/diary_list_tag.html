@@ -24,7 +24,7 @@
         <h1>{{ tag.name }}</h1>
 {#        <form method="GET" action="{% url 'diary:diary_tag_list' %}">#}
         <form method="GET" action="{% url 'diary:diary_tag_list' tag=tag.slug %}">
-
+    <hr>
 {#            <select name="num_diaries" id="num_diaries" class="form-control" title="各ページに表示する日記の数を選んでください">#}
 {#                <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>#}
 {#                <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>#}
@@ -33,28 +33,38 @@
 {#                <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>#}
 {#                <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>#}
 {#            </select>#}
+{#    <hr>#}
+{#            <div class="form-group col-md-4">#}
+{#                <label for="num_diaries">1ページあたりの日記の表示数</label>#}
+{#                <select name="num_diaries" id="num_diaries" class="form-control" >#}
+{#                    <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>#}
+{#                    <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>#}
+{#                    <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>#}
+{#                    <option value="20" {% if num_diaries == '20' %} selected {% endif %}>20</option>#}
+{#                    <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>#}
+{#                    <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>#}
+{#                </select>#}
+{#                <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-clockwise"></i>表示</button>#}
+{#            </div>#}
             <div class="form-group col-md-4">
-                <label for="num_diaries">1ページあたりの日記の表示数</label>
-                <select name="num_diaries" id="num_diaries" class="form-control" >
-                    <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>
-                    <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>
-                    <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>
-                    <option value="20" {% if num_diaries == '20' %} selected {% endif %}>20</option>
-                    <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>
-                    <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>
-                </select>
+            {#    <div class="d-flex">#}
+                    <label for="num_diaries" class="mr-2">1ページあたりの日記の表示数</label>
+                    <select name="num_diaries" id="num_diaries" class="form-control mr-2">
+                        <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>
+                        <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>
+                        <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>
+                        <option value="20" {% if num_diaries == '20' %} selected {% endif %}>20</option>
+                        <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>
+                        <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-refresh"></i></button>
+            {#    </div>#}
             </div>
-            <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-clockwise"></i>表示</button>
-
-
         </form>
-
-        <hr>
+        <br>
 
         <div class="row row-cols-1 row-cols-md-2 g-4">
             {% for diary in diary_list %}
-
-
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
