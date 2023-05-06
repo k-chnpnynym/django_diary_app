@@ -56,11 +56,11 @@ class DiaryListView(LoginRequiredMixin, ListView):
         context['tags'] = Tag.objects.all()
         context['selected_tag'] = self.request.GET.get('tag')
         context['keyword'] = self.request.GET.get('keyword', '')
-        context['num_diaries'] = self.request.GET.get('num_diaries', '10')
+        context['num_diaries'] = self.request.GET.get('num_diaries', '8')
         return context
 
     def get_paginate_by(self, queryset):
-        num_diaries = self.request.GET.get('num_diaries', '10')
+        num_diaries = self.request.GET.get('num_diaries', '8')
 
         if num_diaries == 'all':
             num_diaries = Diary.objects.all().count()
@@ -126,6 +126,7 @@ class DiaryTagView(DiaryListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tag'] = Tag.objects.get(slug=self.kwargs['tag'])
+        context['num_diaries'] = self.request.GET.get('num_diaries', '8')
         return context
 
 

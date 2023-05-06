@@ -21,31 +21,34 @@
 
 {% block main_content %}
     <hr>
+        <h1>{{ tag.name }}</h1>
+{#        <form method="GET" action="{% url 'diary:diary_tag_list' %}">#}
+        <form method="GET" action="{% url 'diary:diary_tag_list' tag=tag.slug %}">
 
-        {% if tag %}
-
-            <h1>{{ tag.name }}</h1>
-        {% else %}
-            <form method="GET" action="{% url 'diary:diary_list' %}">
-                <label for="tag"></label>
-                <select name="tag" id="tag">
-                    <option value="">すべて</option>
-                    {% for tag in tags %}
-                        <option value="{{ tag.slug }}"
-                                {% if tag.slug == selected_tag %} selected {% endif %}>
-                            {{ tag.name }}
-                        </option>
-                    {% endfor %}
+{#            <select name="num_diaries" id="num_diaries" class="form-control" title="各ページに表示する日記の数を選んでください">#}
+{#                <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>#}
+{#                <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>#}
+{#                <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>#}
+{#                <option value="20" {% if num_diaries == '20' %} selected {% endif %}>20</option>#}
+{#                <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>#}
+{#                <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>#}
+{#            </select>#}
+            <div class="form-group col-md-4">
+                <label for="num_diaries">1ページあたりの日記の表示数</label>
+                <select name="num_diaries" id="num_diaries" class="form-control" >
+                    <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>
+                    <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>
+                    <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>
+                    <option value="20" {% if num_diaries == '20' %} selected {% endif %}>20</option>
+                    <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>
+                    <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>
                 </select>
-                <input type="text" name="keyword" value="{{ keyword }}">
-                <button type="submit">Filter</button>
-            </form>
+            </div>
+            <button type="submit" class="btn btn-outline-success"><i class="bi bi-arrow-clockwise"></i>表示</button>
 
-            {% if selected_tag %}
-                <h1>{{ selected_tag.name }}</h1>
-            {% endif %}
 
-        {% endif %}
+        </form>
+
         <hr>
 
         <div class="row row-cols-1 row-cols-md-2 g-4">

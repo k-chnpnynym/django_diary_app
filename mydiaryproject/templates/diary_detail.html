@@ -22,7 +22,8 @@
 {% block main_content %}
     <p>
         {% for tag in object.tags.all %}
-            <span><a href="{% url 'diary:diary_tag_list' tag.slug %}" >{{ tag.name }}</a>&nbsp;</span>
+{#            <span><a href="{% url 'diary:diary_tag_list' tag.slug %}" >{{ tag.name }}</a>&nbsp;</span>#}
+             <a href="{% url 'diary:diary_tag_list' tag.slug %}" class="badge bg-info text-wrap">{{ tag.name }}</a>
         {% endfor %}
     </p>
 
@@ -81,10 +82,12 @@
                         <h5 class="card-title d-inline">{{ comment.user }}</h5>
                         <div class="article-control-area d-inline">
                             {% if request.user == comment.user %}
-                                <a href="{% url 'diary:comment_edit' comment.pk %}" class="btn btn-primary">編集</a>
+{#                                <a href="{% url 'diary:comment_edit' comment.pk %}" class="btn btn-primary"></i>編集</a>#}
+                                <a href="{% url 'diary:comment_edit' comment.pk %}" class="btn btn-light"><i class="fas fa-edit"></i></a>
                             {% endif %}
                             {% if request.user.is_staff or request.user == comment.user %}
-                                 <a href="{% url 'diary:comment_delete' comment.pk %}" class="btn btn-danger">削除</a>
+{#                                 <a href="{% url 'diary:comment_delete' comment.pk %}" class="btn btn-danger"></i>削除</a>#}
+                                 <a href="{% url 'diary:comment_delete' comment.pk %}" class="btn btn-light"><i class="fas fa-trash-alt"></i></a>
                             {% endif %}
 
                         </div>
