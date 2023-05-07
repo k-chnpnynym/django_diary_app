@@ -23,12 +23,16 @@
             <div class="content-list"><a href="{% url 'diary:diary_list' %}">日記一覧</a></div>
         </div>
         {% if user.is_staff %}
-            <div class="links">
+{#            <div class="links">#}
             <div class="content-list"><a href="{% url 'diary:tag_list' %}">タグ一覧</a></div>
         {% endif %}
         <p><a href="{% url 'logout' %}">ログアウト</a></p>
     {% else %}
         <p><a href="{% url 'login' %}">ログイン</a></p>
     {% endif %}
+{#    <div class="home-img">#}
+{#        <img src="{% static 'img/logo_250.png' %}" alt="logo_250.png">#}
+{#    </div>#}
     {#    <p><a href="{% url 'accounts:signup' %}">新規登録</a></p>#}
+
 {% endblock %}
