@@ -93,7 +93,7 @@
                     </div>
                     <div class="card-body">
                         <p class="card-text">{{ comment.text }}</p>
-                        <small class="text-muted"> {{ comment.created_at|date:"Y年m月d日(D)" }}</small>
+                        <small class="text-muted"> {{ comment.created_at|date:"Y年m月d日(D) H:i" }}</small>
                     </div>
                 </div>
             {% endfor %}

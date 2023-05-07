@@ -129,7 +129,8 @@ class DiaryListView(LoginRequiredMixin, ListView):
         keyword = self.request.GET.get('keyword')
         if keyword:
             queryset = queryset.filter(Q(title__icontains=keyword) | Q(text__icontains=keyword) |
-                                       Q(date__icontains=keyword) | Q(user__username__icontains=keyword))
+                                       Q(date__icontains=keyword) | Q(user__username__icontains=keyword)|
+                                       Q(created_at__icontains=keyword) | Q(updated_at__icontains=keyword))
 
         if not self.request.user.is_staff:
             queryset = queryset.exclude(secret=True)
