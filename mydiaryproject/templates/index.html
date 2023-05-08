@@ -1,38 +1,69 @@
 {% extends 'base.html' %}
-{#{% block content %}#}
-{#<h1>Diary App by Django</h1>#}
-
 {% load static %}
 {% load humanize %}
-{% block title %}ホーム{% endblock %}
+
 {% block extra_css %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 {% endblock %}
-{% block header_h1 %}ホーム{% endblock %}
+
+
 {% block breadcrumb %}
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">ホーム</li>
-        </ol>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">育児日記</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="true" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse show" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'diary:index' %}"><i class="fas fa-home"></i> ホーム</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'diary:diary_list' %}"><i class="fas fa-book"></i>日記一覧</a>
+                    </li>
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'diary:tag_list' %}"><i class="fas fa-tags"></i>タグ一覧</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}"></i>ログイン</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
     </nav>
 {% endblock %}
 
 {% block main_content %}
-    {% if user.is_authenticated %}
-{#        <h2><a href="{% url 'diary:diary_list' %}">日記の一覧</a></h2>#}
-        <div class="links">
-            <div class="content-list"><a href="{% url 'diary:diary_list' %}">日記一覧</a></div>
-        </div>
-        {% if user.is_staff %}
+{#    {% if user.is_authenticated %}#}
+{#        <div class="links">#}
+{#            <div class="content-list"><a href="{% url 'diary:diary_list' %}">日記一覧</a></div>#}
+{#        </div>#}
+{#        {% if user.is_staff %}#}
 {#            <div class="links">#}
-            <div class="content-list"><a href="{% url 'diary:tag_list' %}">タグ一覧</a></div>
-        {% endif %}
-        <p><a href="{% url 'logout' %}">ログアウト</a></p>
-    {% else %}
-        <p><a href="{% url 'login' %}">ログイン</a></p>
-    {% endif %}
-{#    <div class="home-img">#}
-{#        <img src="{% static 'img/logo_250.png' %}" alt="logo_250.png">#}
-{#    </div>#}
-    {#    <p><a href="{% url 'accounts:signup' %}">新規登録</a></p>#}
+{#            <div class="content-list"><a href="{% url 'diary:tag_list' %}">タグ一覧</a></div>#}
+{#        {% endif %}#}
+{#        <p><a href="{% url 'logout' %}">ログアウト</a></p>#}
+{#    {% else %}#}
+{#        <p><a href="{% url 'login' %}">ログイン</a></p>#}
+{#    {% endif %}#}
+
+    <div class="home-img">
+{#        <img src="https://i.pinimg.com/originals/2e/87/43/2e87436ed1720d1c10eef12633ee951d.jpg" alt="ムーミンの画像"  class="img-fluid">#}
+        <img src="https://th.bing.com/th/id/R.f408a50c61006ee1a1e038205e465dd9?rik=0EjhzacWWzE%2fOg&riu=http%3a%2f%2fwall-g-image.s3-website-ap-northeast-1.amazonaws.com%2f8258%2ficon.jpg&ehk=hh9sHaVKqxEb89pk4rM6Ry8HMHrN2CnRT0DCo0SrIts%3d&risl=&pid=ImgRaw&r=0" alt="ムーミンの画像"  class="img-fluid">
+{#        <img src="{% static 'img/moomin.png' %}" alt="ムーミンの画像" class="img-fluid">#}
+    </div>
+
+{#        <p><a href="{% url 'accounts:signup' %}">新規登録</a></p>#}
 
 {% endblock %}
