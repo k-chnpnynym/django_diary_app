@@ -53,8 +53,8 @@
                 <td>{{ tag.name }}</td>
                 <td>{{ tag.slug }}</td>
                 <td>
-                    <a href="{% url 'diary:tag_update' tag.pk %}" class="btn btn-primary"><i class="fas fa-edit"></i> 編集</a>
-                    <a href="{% url 'diary:tag_delete' tag.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> 削除</a>
+                    <a href="{% url 'diary:tag_update' tag.pk %}" class="btn btn-primary"><i class="fas fa-edit"></i> </a>
+                    <a href="{% url 'diary:tag_delete' tag.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> </a>
                 </td>
             </tr>
         {% empty %}

@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import redirect, resolve_url
@@ -52,49 +51,6 @@ class DiaryCreateCompleteView(LoginRequiredMixin, TemplateView):
     template_name = 'diary_create_complete.html'
 
 
-# class DiaryListView(LoginRequiredMixin, ListView):
-#     template_name = 'diary_list.html'
-#     model = Diary
-#     #paginate_by = 3   # 1ページあたりの表示数
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['tags'] = Tag.objects.all()
-#         context['selected_tag'] = self.request.GET.get('tag')
-#         context['keyword'] = self.request.GET.get('keyword', '')
-#         context['num_diaries'] = self.request.GET.get('num_diaries', '8')
-#         # ページネーションの状態を維持
-#         context['page_obj'] = self.paginate_queryset(context['object_list'], context['num_diaries'])
-#         return context
-#
-#
-#     def get_paginate_by(self, queryset):
-#         num_diaries = self.request.GET.get('num_diaries', '8')
-#
-#         if num_diaries == 'all':
-#             num_diaries = Diary.objects.all().count()
-#
-#         return num_diaries
-#
-#     # def get_queryset(self):
-#     #     if self.request.user.is_staff:
-#     #         return Diary.objects.all().select_related('user')
-#     #     else:
-#     #         return Diary.objects.filter(secret=False).select_related('user')
-#     def get_queryset(self):
-#         queryset = super().get_queryset()
-#         queryset = queryset.select_related('user').prefetch_related('tags').order_by('-date')
-#         selected_tag = self.request.GET.get('tag')
-#         if selected_tag:
-#             queryset = queryset.filter(tags__slug=selected_tag)
-#         keyword = self.request.GET.get('keyword')
-#         if keyword:
-#             queryset = queryset.filter(Q(title__icontains=keyword) | Q(text__icontains=keyword) |
-#                                        Q(date__icontains=keyword) | Q(user__username__icontains=keyword))
-#
-#         if not self.request.user.is_staff:
-#             queryset = queryset.exclude(secret=True)
-#         return queryset
 
 class DiaryListView(LoginRequiredMixin, ListView):
     template_name = 'diary_list.html'
@@ -110,6 +66,7 @@ class DiaryListView(LoginRequiredMixin, ListView):
         context['selected_tag'] = self.request.GET.get('tag')
         context['keyword'] = self.request.GET.get('keyword', '')
         context['num_diaries'] = self.request.GET.get('num_diaries', '8')
+        context['order_by'] = self.request.GET.get('order_by', '新しい順')
         return context
 
     def get_paginate_by(self, queryset):
@@ -122,7 +79,8 @@ class DiaryListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.select_related('user').prefetch_related('tags').order_by('-date')
+        order_by = self.request.GET.get('order_by', '-date')
+        queryset = queryset.select_related('user').prefetch_related('tags').order_by(order_by)
         selected_tag = self.request.GET.get('tag')
         if selected_tag:
             queryset = queryset.filter(tags__slug=selected_tag)
@@ -175,6 +133,7 @@ class DiaryTagView(DiaryListView):
         context = super().get_context_data(**kwargs)
         context['tag'] = Tag.objects.get(slug=self.kwargs['tag'])
         context['num_diaries'] = self.request.GET.get('num_diaries', '8')
+        context['order_by'] = self.request.GET.get('order_by', '新しい順')
         return context
 
 
@@ -188,7 +147,9 @@ class DiaryTagView(DiaryListView):
 
 
     def get_queryset(self):
-        return super().get_queryset().filter(tags__slug=self.kwargs['tag']).select_related('user').prefetch_related('tags')
+        queryset = super().get_queryset()
+        order_by = self.request.GET.get('order_by', '-date')
+        return queryset.filter(tags__slug=self.kwargs['tag']).select_related('user').prefetch_related('tags').order_by(order_by)
 
 
 
