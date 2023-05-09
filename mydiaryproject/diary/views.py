@@ -87,8 +87,9 @@ class DiaryListView(LoginRequiredMixin, ListView):
         keyword = self.request.GET.get('keyword')
         if keyword:
             queryset = queryset.filter(Q(title__icontains=keyword) | Q(text__icontains=keyword) |
-                                       Q(date__icontains=keyword) | Q(user__username__icontains=keyword)|
-                                       Q(created_at__icontains=keyword) | Q(updated_at__icontains=keyword))
+                                       Q(date__icontains=keyword) | Q(user__username__icontains=keyword)
+                                       # | Q(created_at__icontains=keyword) | Q(updated_at__icontains=keyword)
+                                       )
 
         if not self.request.user.is_staff:
             queryset = queryset.exclude(secret=True)
@@ -134,6 +135,7 @@ class DiaryTagView(DiaryListView):
         context['tag'] = Tag.objects.get(slug=self.kwargs['tag'])
         context['num_diaries'] = self.request.GET.get('num_diaries', '8')
         context['order_by'] = self.request.GET.get('order_by', '新しい順')
+        context['keyword'] = self.request.GET.get('keyword', '')
         return context
 
 
@@ -149,6 +151,12 @@ class DiaryTagView(DiaryListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         order_by = self.request.GET.get('order_by', '-date')
+        keyword = self.request.GET.get('keyword')
+        if keyword:
+            queryset = queryset.filter(Q(title__icontains=keyword) | Q(text__icontains=keyword) |
+                                       Q(date__icontains=keyword) | Q(user__username__icontains=keyword)
+                                       # | Q(created_at__icontains=keyword) | Q(updated_at__icontains=keyword)
+                                       )
         return queryset.filter(tags__slug=self.kwargs['tag']).select_related('user').prefetch_related('tags').order_by(order_by)
 
 
@@ -213,9 +221,9 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if not request.user.is_staff:
-            messages.error(request, 'コメントを削除できるのは管理者だけです。')
-            return redirect('diary:diary_list')
+        # if not request.user.is_staff:
+        #     messages.error(request, 'コメントを削除できるのは管理者だけです。')
+        #     return redirect('diary:diary_list')
         return super().dispatch(request, *args, **kwargs)
 
     # def form_valid(self, form):

@@ -72,7 +72,10 @@
 {#                <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-clockwise"></i>表示</button>#}
 {#            </div>#}
             <div class="form-group col-md-4">
-
+                <label for="keyword">キーワード検索</label>
+                <input type="text" name="keyword" value="{{ keyword }}" class="form-control">
+            </div>
+            <div class="form-group col-md-4">
                 <label for="num_diaries" class="mr-2">1ページあたりの日記の表示数</label>
                 <select name="num_diaries" id="num_diaries" class="form-control mr-2">
                     <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>
