@@ -50,6 +50,6 @@
         <h4>{{ diary.title }}</h4>
         <p>{{ diary.text }}</p>
         <button type="submit" class="btn btn-danger">はい</button>
-        <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-secondary">いいえ</a>
+        <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-primary">いいえ</a>
     </form>
 {% endblock %}

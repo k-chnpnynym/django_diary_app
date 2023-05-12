@@ -44,28 +44,7 @@
     </div>
             <h1>{{ tag.name }}</h1>
 
-    <form method="GET" action="{% url 'diary:diary_list' %}"  >
-{#        <label for="tag"></label>#}
-{#        <select name="tag" id="tag" class="form-control" title="タグを選択してください">#}
-{#            <option value="">すべて</option>#}
-{#            {% for tag in tags %}#}
-{#                <option value="{{ tag.slug }}"#}
-{#                        {% if tag.slug == selected_tag %} selected {% endif %}>#}
-{#                    {{ tag.name }}#}
-{#                </option>#}
-{#            {% endfor %}#}
-{#        </select>#}
-{#        <select name="num_diaries" id="num_diaries" class="form-control" title="各ページに表示する日記の数を選んでください">#}
-{#            <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>#}
-{#            <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>#}
-{#            <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>#}
-{#            <option value="20" {% if num_diaries == '20' %} selected {% endif %}>20</option>#}
-{#            <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>#}
-{#            <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>#}
-{#        </select>#}
-{#        <input type="text" name="keyword" value="{{ keyword }}" class="form-control">#}
-{#        <button type="submit" class="btn btn-outline-success">Filter</button>#}
-{#    <hr>#}
+    <form method="GET" action="{% url 'diary:diary_list' %}">
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="tag">タグ検索</label>
@@ -97,8 +76,8 @@
             <div class="form-group col-md-4">
               <label for="order_by">表示順</label>
               <select name="order_by" id="order_by" class="form-control">
-                <option value="-date" {% if order_by == '-date' %} selected {% endif %}>新しい順</option>
-                <option value="date" {% if order_by == 'date' %} selected {% endif %}>古い順</option>
+                <option value="-date" {% if selected_order_by == '-date' %} selected {% endif %}>新しい順</option>
+                <option value="date" {% if selected_order_by == 'date' %} selected {% endif %}>古い順</option>
               </select>
             </div>
         </div>

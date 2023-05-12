@@ -212,7 +212,7 @@ class DiaryDeleteView(LoginRequiredMixin, DeleteView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('dairy:diary_list')
+        return reverse('diary:diary_list')
 
 
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
