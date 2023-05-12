@@ -76,8 +76,8 @@
             <div class="form-group col-md-4">
               <label for="order_by">表示順</label>
               <select name="order_by" id="order_by" class="form-control">
-                <option value="-date" {% if selected_order_by == '-date' %} selected {% endif %}>新しい順</option>
-                <option value="date" {% if selected_order_by == 'date' %} selected {% endif %}>古い順</option>
+                <option value="-date" {% if order_by == '-date' %} selected {% endif %}>新しい順</option>
+                <option value="date" {% if order_by == 'date' %} selected {% endif %}>古い順</option>
               </select>
             </div>
         </div>
@@ -96,10 +96,6 @@
                         {% if diary.thumbnail %}
                             <img src="{{ diary.thumbnail.url }}" class="img-fluid">
                         {% endif %}
-{#                            {% if diary.thumbnail_video %}#}
-{#                                <img src="{{ diary.thumbnail_video.url }}" class="img-fluid">#}
-{#                            {% endif %}#}
-
                         <p class="card-text">{{ diary.text|truncatechars:50 }}</p>
                         <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-primary">詳細を見る</a>
                     </div>
@@ -142,12 +138,12 @@
           <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="?page=1{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}" aria-label="first">
+              <a class="page-link" href="?page=1{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="first">
                 &laquo;
               </a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}" aria-label="previous">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="previous">
                 &lsaquo;
               </a>
             </li>
@@ -160,7 +156,7 @@
               </li>
               {% else %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ page_num }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}">
+                <a class="page-link" href="?page={{ page_num }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}">
                   {{ page_num }}
                 </a>
               </li>

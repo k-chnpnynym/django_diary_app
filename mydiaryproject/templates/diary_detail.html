@@ -44,7 +44,7 @@
     <p>
         {% for tag in object.tags.all %}
 {#            <span><a href="{% url 'diary:diary_tag_list' tag.slug %}" >{{ tag.name }}</a>&nbsp;</span>#}
-             <a href="{% url 'diary:diary_tag_list' tag.slug %}" class="badge bg-info text-wrap">{{ tag.name }}</a>
+             <a href="{% url 'diary:diary_tag_list' tag.slug %}" class="noborder badge bg-info text-wrap">{{ tag.name }}</a>
         {% endfor %}
     </p>
 

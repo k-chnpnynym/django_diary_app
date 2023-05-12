@@ -38,6 +38,7 @@ class Diary(models.Model):
     title = models.CharField(verbose_name='タイトル', max_length=40)
     text = models.TextField(verbose_name='本文', max_length=200, blank=True)
     image = models.ImageField(upload_to='media/images/', verbose_name='写真', blank=True, null=True)
+    image_video = models.ImageField(upload_to='media/video_images/', verbose_name='動画のサムネイル', blank=True, null=True)
     video = models.FileField(upload_to='media/videos/', verbose_name='動画', blank=True, null=True)  # 動画用のフィールドを追加
 
     secret = models.BooleanField(verbose_name='内緒', default=True)
@@ -46,8 +47,7 @@ class Diary(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='タグ')
     thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(100, 100)], format='JPEG',options={'quality': 60}, )
-    thumbnail_video = ImageSpecField(source='video', processors=[ResizeToFill(100, 100)], format='JPEG',
-                                     options={'quality': 60}, )
+    thumbnail_video = ImageSpecField(source='image_video', processors=[ResizeToFill(100, 100)], format='JPEG', options={'quality': 60}, )
 
     def __str__(self):
         return f"{self.title} - {self.date}"

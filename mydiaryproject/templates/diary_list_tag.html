@@ -151,12 +151,12 @@
           <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="?page=1{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}" aria-label="first">
+              <a class="page-link" href="?page=1{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="first">
                 &laquo;
               </a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}" aria-label="previous">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="previous">
                 &lsaquo;
               </a>
             </li>
@@ -169,7 +169,7 @@
               </li>
               {% else %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ page_num }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}">
+                <a class="page-link" href="?page={{ page_num }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}">
                   {{ page_num }}
                 </a>
               </li>
