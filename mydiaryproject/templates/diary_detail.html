@@ -6,17 +6,9 @@
 
 {% block header_h1 %}
     {{ diary.title }}　
-{#    <small>{{ diary.date|date:"Y年m月d日(D)" }}</small>#}
 {% endblock %}
 
 {% block breadcrumb %}
-{#    <nav aria-label="breadcrumb">#}
-{#        <ol class="breadcrumb">#}
-{#            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:index' %}">ホーム</a></li>#}
-{#            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:diary_list' %}">日記一覧</a></li>#}
-{#            <li class="breadcrumb-item active" aria-current="page">日記</li>#}
-{#        </ol>#}
-{#    </nav>#}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">育児日記</a>
@@ -28,12 +20,28 @@
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="{% url 'diary:index' %}"><i class="fas fa-home"></i> ホーム</a>
             </li>
+            {% if request.user.is_staff %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'diary:tag_list' %}"><i class="fas fa-tags"></i> タグ一覧</a>
+                </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'diary:diary_list' %}"><i class="fas fa-book"></i> 日記一覧</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active"><i class="far fa-file-alt"></i> 日記詳細</a>
             </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"></i>ログイン</a>
+                </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -43,7 +51,6 @@
 {% block main_content %}
     <p>
         {% for tag in object.tags.all %}
-{#            <span><a href="{% url 'diary:diary_tag_list' tag.slug %}" >{{ tag.name }}</a>&nbsp;</span>#}
              <a href="{% url 'diary:diary_tag_list' tag.slug %}" class="noborder badge bg-info text-wrap">{{ tag.name }}</a>
         {% endfor %}
     </p>
@@ -51,8 +58,6 @@
     <div class="card">
         <div class="card-header">
             <small class="text-muted">{{ diary.date|date:"Y年m月d日(D)" }}</small>
-{#            <small class="text-muted">作成日: {{ diary.created_at|date:"Y年m月d日(D)" }}</small>#}
-{#            <small class="text-muted">更新日: {{ diary.updated_at|date:"Y年m月d日(D)" }}</small>#}
             <small class="text-muted"> {{ diary.user }}</small>
         </div>
         {% if diary.image %}
@@ -67,13 +72,6 @@
         <div class="card-body">
             <p class="card-text">{{ diary.text }}</p>
         </div>
-{#        <ul class="list-group list-group-flush">#}
-{#            {% for tag in object.tags.all %}#}
-{#                <li class="list-group-item">#}
-{#                    <a href="{% url 'diary:diary_tag_list' tag.slug %}" >{{ tag.name }}</a>#}
-{#                </li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
         {% if request.user.is_staff or request.user == diary.user %}
             <div class="article-control-area">
                 <a href="{% url 'diary:diary_update' diary.pk %}" class="btn btn-primary">編集</a>
@@ -83,6 +81,7 @@
     </div>
     <br>
     <a href="javascript:history.back()" class="btn btn btn-success"><i class="fas fa-chevron-left"></i> 戻る</a>
+
 
     <h2 class="mt-5">コメント</h2>
     <hr>
@@ -106,11 +105,9 @@
                         <h5 class="card-title d-inline">{{ comment.user }}</h5>
                         <div class="article-control-area d-inline">
                             {% if request.user == comment.user %}
-{#                                <a href="{% url 'diary:comment_edit' comment.pk %}" class="btn btn-primary"></i>編集</a>#}
                                 <a href="{% url 'diary:comment_edit' comment.pk %}" class="btn btn-light"><i class="fas fa-edit"></i></a>
                             {% endif %}
                             {% if request.user.is_staff or request.user == comment.user %}
-{#                                 <a href="{% url 'diary:comment_delete' comment.pk %}" class="btn btn-danger"></i>削除</a>#}
                                  <a href="{% url 'diary:comment_delete' comment.pk %}" class="btn btn-light"><i class="fas fa-trash-alt"></i></a>
                             {% endif %}
 

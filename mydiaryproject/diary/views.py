@@ -66,7 +66,9 @@ class DiaryListView(LoginRequiredMixin, ListView):
         context['selected_tag'] = self.request.GET.get('tag')
         context['keyword'] = self.request.GET.get('keyword', '')
         context['num_diaries'] = self.request.GET.get('num_diaries', '8')
-        context['order_by'] = self.request.GET.get('order_by', '新しい順')
+        context['order_by'] = self.request.GET.get('order_by', '-date')
+        page_obj = context['page_obj']
+        context['paginator_range'] = page_obj.paginator.get_elided_page_range(page_obj.number)
         return context
 
     def get_paginate_by(self, queryset):
@@ -134,7 +136,7 @@ class DiaryTagView(DiaryListView):
         context = super().get_context_data(**kwargs)
         context['tag'] = Tag.objects.get(slug=self.kwargs['tag'])
         context['num_diaries'] = self.request.GET.get('num_diaries', '8')
-        context['order_by'] = self.request.GET.get('order_by', '新しい順')
+        context['order_by'] = self.request.GET.get('order_by', '-date')
         context['keyword'] = self.request.GET.get('keyword', '')
         return context
 

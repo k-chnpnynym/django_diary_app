@@ -10,13 +10,6 @@
 {% endblock %}
 
 {% block breadcrumb %}
-{#<nav aria-label="breadcrumb">#}
-{#    <ol class="breadcrumb">#}
-{#        <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:index' %}">ホーム</a></li>#}
-{#        <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:diary_list' %}">日記一覧</a></li>#}
-{#        <li class="breadcrumb-item active" aria-current="page">日記の作成</li>#}
-{#    </ol>#}
-{#</nav>#}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">育児日記</a>
@@ -35,6 +28,17 @@
               <a class="nav-link active" ><i class="fas fa-pen"></i> 日記の作成</a>
             </li>
           </ul>
+          <ul class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"></i>ログイン</a>
+                </li>
+            {% endif %}
+          </ul>
         </div>
       </div>
     </nav>
@@ -49,8 +53,9 @@
             {% bootstrap_form form %}
         {% endif %}
 
-{#        <button type="submit" class="form-control col-1">投稿</button>#}
         <button type="submit" class="btn btn-primary">作成</button>
+        <a class="btn btn-success" href="{% url 'diary:diary_list' %}" role="button">キャンセル</a>
     </form>
-{#    <a href="{% url 'diary:index' %}">戻る</a>#}
+    <br>
+
 {% endblock %}

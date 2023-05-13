@@ -6,7 +6,7 @@ from .models import Diary, Comment
 class DiaryForm(forms.ModelForm):
     class Meta:
         model = Diary
-        fields = ('date', 'title', 'text', 'image', 'image_video', 'video', 'tags')
+        fields = ('date', 'title', 'text', 'image', 'video', 'image_video', 'tags')
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -18,7 +18,7 @@ class DiaryForm(forms.ModelForm):
 class DiaryStaffForm(forms.ModelForm):
     class Meta:
         model = Diary
-        fields = ('date', 'title', 'text', 'image', 'image_video',  'video', 'tags', 'secret')
+        fields = ('date', 'title', 'text', 'image', 'video', 'image_video', 'tags', 'secret')
 
 
 

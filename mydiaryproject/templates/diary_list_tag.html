@@ -1,23 +1,15 @@
 {% extends "base.html" %}
 
 {% block title %}
-    日記リスト - {{ block.super }}
+    日記一覧 - {{ block.super }}
 {% endblock %}
 
 {% block header_h1 %}
 {#    <br>#}
-    日記リスト
+    日記一覧
 {% endblock %}
 
 {% block breadcrumb %}
-{#    <nav aria-label="breadcrumb">#}
-{#        <ol class="breadcrumb">#}
-{#            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:index' %}">ホーム</a></li>#}
-{#            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'diary:diary_list' %}">日記一覧</a></li>#}
-{#            <li class="breadcrumb-item"><a href="javascript:history.back()">日記</a></li>#}
-{#            <li class="breadcrumb-item active" >{{ tag.name }}の日記一覧</li>#}
-{#        </ol>#}
-{#    </nav>#}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">育児日記</a>
@@ -29,6 +21,11 @@
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="{% url 'diary:index' %}"><i class="fas fa-home"></i> ホーム</a>
             </li>
+            {% if request.user.is_staff %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'diary:tag_list' %}"><i class="fas fa-tags"></i> タグ一覧</a>
+                </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'diary:diary_list' %}"><i class="fas fa-book"></i> 日記一覧</a>
             </li>
@@ -39,6 +36,17 @@
               <a class="nav-link active" aria-current="page"><i class="fas fa-book"></i> {{ tag.name }}の日記一覧</a>
             </li>
           </ul>
+          <ul class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"></i>ログイン</a>
+                </li>
+            {% endif %}
+          </ul>
         </div>
       </div>
     </nav>
@@ -47,33 +55,11 @@
 {% block main_content %}
     <hr>
         <h1>{{ tag.name }}</h1>
-{#        <form method="GET" action="{% url 'diary:diary_tag_list' %}">#}
         <form method="GET" action="{% url 'diary:diary_tag_list' tag=tag.slug %}">
     <hr>
-{#            <select name="num_diaries" id="num_diaries" class="form-control" title="各ページに表示する日記の数を選んでください">#}
-{#                <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>#}
-{#                <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>#}
-{#                <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>#}
-{#                <option value="20" {% if num_diaries == '20' %} selected {% endif %}>20</option>#}
-{#                <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>#}
-{#                <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>#}
-{#            </select>#}
-{#    <hr>#}
-{#            <div class="form-group col-md-4">#}
-{#                <label for="num_diaries">1ページあたりの日記の表示数</label>#}
-{#                <select name="num_diaries" id="num_diaries" class="form-control" >#}
-{#                    <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>#}
-{#                    <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>#}
-{#                    <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>#}
-{#                    <option value="20" {% if num_diaries == '20' %} selected {% endif %}>20</option>#}
-{#                    <option value="30" {% if num_diaries == '30' %} selected {% endif %}>30</option>#}
-{#                    <option value="all" {% if num_diaries == 'all' %} selected {% endif %}>すべて</option>#}
-{#                </select>#}
-{#                <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-clockwise"></i>表示</button>#}
-{#            </div>#}
             <div class="form-group col-md-4">
                 <label for="keyword">キーワード検索</label>
-                <input type="text" name="keyword" value="{{ keyword }}" class="form-control">
+                <input type="text" name="keyword" value="{{ keyword }}" class="form-control" placeholder="日付/タイトル/本文/ユーザー名で検索">
             </div>
             <div class="form-group col-md-4">
                 <label for="num_diaries" class="mr-2">1ページあたりの日記の表示数</label>
@@ -122,75 +108,48 @@
 
 
         <br>
-{#        <nav aria-label="Page navigation">#}
-{#            <ul class="pagination pagination justify-content-center">#}
-{#                <!-- 現在よりも前のページが存在する場合 -->#}
-{#                {% if page_obj.has_previous %}#}
-{#                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; 先頭</a></li>#}
-{#                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">前へ</a></li>#}
-{#                {% endif %}#}
-{##}
-{#                <!-- 数字の部分 -->#}
-{#                {% for num in page_obj.paginator.page_range %}#}
-{#                    {% if page_obj.number == num %}#}
-{#                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>#}
-{#                    {% else %}#}
-{#                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>#}
-{#                    {% endif %}#}
-{#                {% endfor %}#}
-{##}
-{#                <!-- 現在よりも後のページが存在する場合 -->#}
-{#                {% if page_obj.has_next %}#}
-{#                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">次へ</a></li>#}
-{#                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">最後 &raquo;</a></li>#}
-{#                {% endif %}#}
-{#            </ul>#}
-{#        </nav>#}
-        {% if is_paginated %}
+    {% if is_paginated %}
         <nav aria-label="Page navigation">
           <ul class="pagination justify-content-center">
+        <ul class="pagination justify-content-center overflow-auto" style="white-space: nowrap">
             {% if page_obj.has_previous %}
-            <li class="page-item">
-              <a class="page-link" href="?page=1{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="first">
-                &laquo;
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="previous">
-                &lsaquo;
-              </a>
-            </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="previous">
+                    &lsaquo;
+                  </a>
+                </li>
             {% endif %}
-
-            {% for page_num in page_obj.paginator.page_range %}
-              {% if page_obj.number == page_num %}
-              <li class="page-item active">
-                <span class="page-link">{{ page_num }}<span class="sr-only">(current)</span></span>
-              </li>
-              {% else %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ page_num }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}">
-                  {{ page_num }}
-                </a>
-              </li>
-              {% endif %}
+            {% for page_num in paginator_range %}
+                  {% if page_num == paginator.ELLIPSIS %}
+                    <li class="page-item disabled"><span class="page-link">{{ page_num }}</span></li>
+                  {% elif page_obj.number|add:-1 <= page_num and page_num <= page_obj.number|add:1 %}
+                    {% if page_obj.number == page_num %}
+                      <li class="page-item active">
+                        <span class="page-link">{{ page_num }}<span class="sr-only">(current)</span></span>
+                      </li>
+                    {% else %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_num }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}">
+                          {{ page_num }}
+                        </a>
+                      </li>
+                    {% endif %}
+                  {% elif page_num == 1 or page_num == paginator.num_pages %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ page_num }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}">
+                        {{ page_num }}
+                      </a>
+                    </li>
+                  {% endif %}
             {% endfor %}
-
             {% if page_obj.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}" aria-label="next">
-                &rsaquo;
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}" aria-label="last">
-                &raquo;
-              </a>
-            </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="next">
+                    &rsaquo;
+                  </a>
+                </li>
             {% endif %}
           </ul>
         </nav>
-        {% endif %}
-
-
+    {% endif %}
 {% endblock %}
