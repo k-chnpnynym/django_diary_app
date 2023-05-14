@@ -53,10 +53,10 @@
 {% endblock %}
 
 {% block main_content %}
-    <hr>
-        <h1>{{ tag.name }}</h1>
+    <br>
+        <h1 class="bg-light">{{ tag.name }}</h1>
         <form method="GET" action="{% url 'diary:diary_tag_list' tag=tag.slug %}">
-    <hr>
+        <br>
             <div class="form-group col-md-4">
                 <label for="keyword">キーワード検索</label>
                 <input type="text" name="keyword" value="{{ keyword }}" class="form-control" placeholder="日付/タイトル/本文/ユーザー名で検索">
@@ -93,6 +93,9 @@
                             <h5 class="card-title">{{ diary.title }}</h5>
                             {% if diary.thumbnail %}
                                 <img src="{{ diary.thumbnail.url }}" class="img-fluid">
+                            {% endif %}
+                            {% if diary.thumbnail_video %}
+                                <img src="{{ diary.thumbnail_video.url }}" class="img-fluid">
                             {% endif %}
                             <p class="card-text">{{ diary.text|truncatechars:50 }}</p>
                             <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-primary">詳細を見る</a>
