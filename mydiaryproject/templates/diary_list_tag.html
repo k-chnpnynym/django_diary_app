@@ -58,11 +58,11 @@
         <form method="GET" action="{% url 'diary:diary_tag_list' tag=tag.slug %}">
         <br>
             <div class="form-group col-md-4">
-                <label for="keyword">キーワード検索</label>
+                <label for="keyword" class="bg-light"><strong>キーワードで絞りこみ：</strong></label>
                 <input type="text" name="keyword" value="{{ keyword }}" class="form-control" placeholder="日付/タイトル/本文/ユーザー名で検索">
             </div>
             <div class="form-group col-md-4">
-                <label for="num_diaries" class="mr-2">1ページあたりの日記の表示数</label>
+                <label for="num_diaries" class="mr-2 bg-light"><strong>1ページあたりの日記の表示数：</strong></label>
                 <select name="num_diaries" id="num_diaries" class="form-control mr-2">
                     <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>
                     <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>
@@ -73,7 +73,7 @@
                 </select>
             </div>
             <div class="form-group col-md-4">
-                  <label for="order_by">表示順</label>
+                  <label for="order_by" class="bg-light"><strong>表示順：</strong></label>
                   <select name="order_by" id="order_by" class="form-control">
                     <option value="-date" {% if order_by == '-date' %} selected {% endif %}>新しい順</option>
                     <option value="date" {% if order_by == 'date' %} selected {% endif %}>古い順</option>
