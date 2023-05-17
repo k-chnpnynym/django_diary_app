@@ -36,7 +36,7 @@ class Diary(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date = models.DateField(verbose_name='日付', default=timezone.now)
     title = models.CharField(verbose_name='タイトル', max_length=40)
-    text = models.TextField(verbose_name='本文', max_length=200, blank=True)
+    text = models.TextField(verbose_name='本文', max_length=2000, blank=True, null=True)
     image = models.ImageField(upload_to='media/images/', verbose_name='写真', blank=True, null=True)
     image_video = models.ImageField(upload_to='media/video_images/', verbose_name='動画のサムネイル', blank=True, null=True)
     video = models.FileField(upload_to='media/videos/', verbose_name='動画', blank=True, null=True)  # 動画用のフィールドを追加
@@ -61,7 +61,7 @@ class Diary(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(verbose_name='作成日時', default=timezone.now)
-    text = models.TextField(verbose_name='コメント', max_length=200, blank=True)
+    text = models.TextField(verbose_name='コメント', max_length=500, blank=True)
     diary = models.ForeignKey(Diary, on_delete=models.CASCADE)
 
 

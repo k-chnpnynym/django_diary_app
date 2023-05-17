@@ -70,7 +70,7 @@
             </video>
         {% endif %}
         <div class="card-body">
-            <p class="card-text">{{ diary.text }}</p>
+            <p class="card-text">{{ diary.text|linebreaksbr }}</p>
         </div>
         {% if request.user.is_staff or request.user == diary.user %}
             <div class="article-control-area">
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">{{ comment.text }}</p>
+                        <p class="card-text">{{ comment.text|linebreaksbr }}</p>
                         <small class="text-muted"> {{ comment.created_at|date:"Y年m月d日(D) H:i" }}</small>
                     </div>
                 </div>
