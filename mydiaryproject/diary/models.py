@@ -1,5 +1,7 @@
+import os
 import uuid
 
+import cv2
 from django.conf import settings
 from django.db import models
 from django.shortcuts import resolve_url
@@ -56,7 +58,26 @@ class Diary(models.Model):
     def get_absolute_url(self):
         return resolve_url('diary:diary_detail', pk=self.pk)
 
+    from django.core.files.storage import default_storage
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.video:
+            path = self.video.path  # ファイルの保存された場所
+            file_name = os.path.basename(path)  # ファイル名部分
+
+            # opencvで1秒地点を読み込む
+            cap = cv2.VideoCapture(path)
+            cap.set(cv2.CAP_PROP_POS_MSEC, 1000)
+            is_success, image = cap.read()
+
+            # 読み込んだ部分を書き出す
+            output_path = f'media/video_images/{file_name}.jpg'
+            cv2.imwrite(output_path, image)
+
+            # 書き出したファイルのパスを、image_videoに格納して保存
+            self.image_video = output_path
+            super().save(*args, **kwargs)
 
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

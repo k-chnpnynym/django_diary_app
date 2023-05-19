@@ -167,7 +167,7 @@ class DiaryTagView(DiaryListView):
 class DiaryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'diary_update.html'
     model = Diary
-    fields = ('date', 'title', 'text', 'image', 'tags')
+    fields = ('date', 'title', 'text', 'image', 'video', 'image_video', 'tags')
 
     def get_success_url(self):
         diary_pk = self.object.pk
