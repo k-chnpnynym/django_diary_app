@@ -51,6 +51,9 @@ class Diary(models.Model):
     thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(100, 100)], format='JPEG',options={'quality': 60}, )
     thumbnail_video = ImageSpecField(source='image_video', processors=[ResizeToFill(100, 100)], format='JPEG', options={'quality': 60}, )
 
+
+
+
     def __str__(self):
         return f"{self.title} - {self.date}"
 
@@ -72,12 +75,12 @@ class Diary(models.Model):
             is_success, image = cap.read()
 
             # 読み込んだ部分を書き出す
-            output_path = f'media/video_images/{file_name}.jpg'
+            output_path = os.path.join(settings.BASE_DIR, f'media/video_images/{file_name}.jpg')
             cv2.imwrite(output_path, image)
 
             # 書き出したファイルのパスを、image_videoに格納して保存
-            self.image_video = output_path
-            super().save(*args, **kwargs)
+            self.image_video = f'media/video_images/{file_name}.jpg'
+
 
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

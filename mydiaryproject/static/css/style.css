@@ -20,9 +20,17 @@ div.article-control-area {
   margin: 20px;
 }
 
+
 .noborder {
   text-decoration:none;
 }
 
+
+
+.thumnail{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
 
 /*# sourceMappingURL=style.css.map */

@@ -10,6 +10,7 @@ class DiaryForm(forms.ModelForm):
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'tags': forms.CheckboxSelectMultiple,
             'text': forms.Textarea(attrs={'class': 'form-control', 'rows': 10}),
         }
 
@@ -19,6 +20,9 @@ class DiaryStaffForm(forms.ModelForm):
     class Meta:
         model = Diary
         fields = ('date', 'title', 'text', 'image', 'video', 'image_video', 'tags', 'secret')
+        widgets = {
+            'tags': forms.CheckboxSelectMultiple,
+        }
 
 
 

@@ -110,7 +110,7 @@
 {#                            <img src="{{ diary.thumbnail_video.url }}" class="img-fluid">#}
 {#                        {% endif %}#}
                         {% if diary.image_video %}
-                            <img src="{{ diary.image_video.url }}" class="img-fluid">
+                            <img src="{{ diary.image_video.url }}" class="img-fluid thumnail">
                         {% endif %}
                         <p class="card-text">{{ diary.text|truncatechars:50 }}</p>
                         <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-primary">詳細を見る</a>
