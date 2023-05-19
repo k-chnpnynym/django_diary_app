@@ -19,7 +19,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
 class DiaryCreateView(LoginRequiredMixin, CreateView):
     template_name = 'diary_create.html'
     form_class = DiaryForm
-    success_url = reverse_lazy('diary:diary_list' )
+    success_url = reverse_lazy('diary:diary_list')
 
     def get_queryset(self):
         return Diary.objects.all().select_related('user')
@@ -167,7 +167,7 @@ class DiaryTagView(DiaryListView):
 class DiaryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'diary_update.html'
     model = Diary
-    fields = ('date', 'title', 'text', 'image', 'video', 'image_video', 'tags')
+    fields = ('date', 'title', 'tags', 'text', 'image', 'video', 'image_video')
 
     def get_success_url(self):
         diary_pk = self.object.pk
@@ -177,7 +177,7 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
     def get_form_class(self):
         if self.request.user.is_staff:
             return DiaryStaffForm
-        return super().get_form_class()
+        return DiaryForm
 
     def form_valid(self, form):
         diary = form.save(commit=False)
@@ -195,6 +195,7 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_queryset(self):
         return Diary.objects.all().select_related('user')
+
 
 
 
