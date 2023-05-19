@@ -101,9 +101,9 @@
         {% if object.comment_set.all %}
             {% for comment in object.comment_set.all %}
                 <div class="card mb-3">
-                    <div class="card-header">
+                    <div class="card-header nowrap">
                         <h5 class="card-title d-inline">{{ comment.user }} </h5>
-                        <small class="text-muted"> {{ comment.created_at|date:"Y年m月d日(D) H:i" }}</small>
+                        <small class="text-muted"> {{ comment.created_at|date:"Y年n月j日(D) G:i" }}</small>
                         {% if request.user == comment.user %}
                             <a href="{% url 'diary:comment_edit' comment.pk %}" class="btn btn-light"><i class="fas fa-edit"></i></a>
                         {% endif %}
@@ -121,5 +121,6 @@
             <p>コメントはありません。</p>
         {% endif %}
     </div>
+
 
 {% endblock %}
