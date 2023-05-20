@@ -33,4 +33,12 @@ div.article-control-area {
   object-fit: cover;
 }
 
-/*# sourceMappingURL=style.css.map */
+.custom-placeholder::placeholder {
+  /*color: #999999;*/
+  color: #CCCCCC;
+}
+
+.search-icon {
+  font-size: 1.1rem; /* アイコンのサイズ（例: 1.25rem） */
+  color: #AAAAAA; /* アイコンの色（より薄いグレー） */
+ }
