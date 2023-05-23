@@ -111,16 +111,14 @@
                         <h5 class="card-title">{{ diary.title }}</h5>
                         {% if diary.thumbnail %}
                             <img src="{{ diary.thumbnail.url }}" class="img-fluid">
-                        {% endif %}
-                        {% if diary.thumbnail_video %}
+                        {% elif diary.thumbnail_video %}
                             <img src="{{ diary.thumbnail_video.url }}" class="img-fluid">
-                        {% elif diary.image_video %}
-                            <img src="{{ diary.image_video.url }}" class="img-fluid thumnail">
+{#                        {% elif diary.image_video %}#}
+{#                            <img src="{{ diary.image_video.url }}" class="img-fluid thumnail">#}
                         {% endif %}
-
-
                         <p class="card-text">{{ diary.text|truncatechars:50 }}</p>
-                        <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-primary">詳細を見る</a>
+{#                        <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-primary">詳細を見る</a>#}
+                        <a href="{{diary.get_absolute_url}}" class="btn btn-primary">詳細を見る</a>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">{{ diary.date|date:"Y年m月d日(D)" }} {{ diary.user }}</small>
@@ -134,12 +132,10 @@
     <br>
     {% if is_paginated %}
         <nav aria-label="Page navigation">
-{#          <ul class="pagination justify-content-center">#}
           <ul class="pagination justify-content-center overflow-auto" style="white-space: nowrap">
             {% if page_obj.has_previous %}
                 <li class="page-item">
                   <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="previous">
-{#                    «#}
                     <strong><<</strong>
                   </a>
                 </li>
@@ -170,7 +166,6 @@
             {% if page_obj.has_next %}
                 <li class="page-item">
                   <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}{% if num_diaries %}&num_diaries={{ num_diaries }}{% endif %}{% if order_by %}&order_by={{ order_by }}{% endif %}" aria-label="next">
-{#                    »#}
                     <strong>>></strong>
                   </a>
                 </li>

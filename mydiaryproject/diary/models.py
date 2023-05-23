@@ -46,8 +46,8 @@ class Diary(models.Model):
     updated_at = models.DateTimeField(verbose_name='編集日時', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='タグ')
-    thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(100, 100)], format='JPEG',options={'quality': 60}, )
-    thumbnail_video = ImageSpecField(source='image_video', processors=[ResizeToFill(100, 100)], format='JPEG', options={'quality': 60}, )
+    thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(200, 200)], format='JPEG',options={'quality': 60}, )
+    thumbnail_video = ImageSpecField(source='image_video', processors=[ResizeToFill(200, 200)], format='JPEG', options={'quality': 60}, )
 
 
 
@@ -78,6 +78,7 @@ class Diary(models.Model):
 
                 # 書き出したファイルのパスを、image_videoに格納して保存
                 self.image_video = f'media/video_images/{file_name}.jpg'
+                self.thumbnail_video = f'media/video_images/{file_name}.jpg'
 
         super().save(*args, **kwargs)
 
@@ -88,5 +89,8 @@ class Comment(models.Model):
     created_at = models.DateTimeField(verbose_name='作成日時', default=timezone.now)
     text = models.TextField(verbose_name='コメント', max_length=500, blank=True)
     diary = models.ForeignKey(Diary, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return resolve_url('diary:diary_detail', pk=self.diary.pk)
 
 

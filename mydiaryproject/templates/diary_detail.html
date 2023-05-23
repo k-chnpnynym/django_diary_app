@@ -51,10 +51,9 @@
 {% block main_content %}
     <p>
         {% for tag in object.tags.all %}
-             <a href="{% url 'diary:diary_tag_list' tag.slug %}" class="noborder badge bg-info text-wrap">{{ tag.name }}</a>
+             <a href="{{ tag.get_absolute_url }}" class="noborder badge bg-info text-wrap">{{ tag.name }}</a>
         {% endfor %}
     </p>
-
     <div class="card">
         <div class="card-header">
             <small class="text-muted">{{ diary.date|date:"Y年m月d日(D)" }}</small>
@@ -81,7 +80,6 @@
     </div>
     <br>
     <a href="javascript:history.back()" class="btn btn btn-success"><i class="fas fa-chevron-left"></i> 戻る</a>
-
 
     <h2 class="mt-5">コメント</h2>
     <hr>
