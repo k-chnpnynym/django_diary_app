@@ -102,31 +102,40 @@
     </form>
     <br>
     <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% if diary_list %}
+            {% for diary in diary_list %}
 
-        {% for diary in diary_list %}
-
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ diary.title }}</h5>
-                        {% if diary.thumbnail %}
-                            <img src="{{ diary.thumbnail.url }}" class="img-fluid">
-                        {% elif diary.thumbnail_video %}
-                            <img src="{{ diary.thumbnail_video.url }}" class="img-fluid">
-{#                        {% elif diary.image_video %}#}
-{#                            <img src="{{ diary.image_video.url }}" class="img-fluid thumnail">#}
-                        {% endif %}
-                        <p class="card-text">{{ diary.text|truncatechars:50 }}</p>
-{#                        <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-primary">詳細を見る</a>#}
-                        <a href="{{diary.get_absolute_url}}" class="btn btn-primary">詳細を見る</a>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">{{ diary.date|date:"Y年m月d日(D)" }} {{ diary.user }}</small>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ diary.title }}</h5>
+                            {% if diary.thumbnail %}
+                                <img src="{{ diary.thumbnail.url }}" class="img-fluid">
+                            {% elif diary.thumbnail_video %}
+                                <img src="{{ diary.thumbnail_video.url }}" class="img-fluid">
+    {#                        {% elif diary.image_video %}#}
+    {#                            <img src="{{ diary.image_video.url }}" class="img-fluid thumnail">#}
+                            {% endif %}
+                            <p class="card-text">{{ diary.text|truncatechars:50 }}</p>
+    {#                        <a href="{% url 'diary:diary_detail' diary.pk %}" class="btn btn-primary">詳細を見る</a>#}
+                            <a href="{{diary.get_absolute_url}}" class="btn btn-primary">詳細を見る</a>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">{{ diary.date|date:"Y年m月d日(D)" }} {{ diary.user }}</small>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+{#            <div class="col">#}
+{#                <div class="card">#}
+{#                    <div class="card-body">#}
+                        <p class="card-text">日記はまだありません。</p>
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+        {% endif %}
     </div>
 
     <br>

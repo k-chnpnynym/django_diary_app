@@ -50,8 +50,6 @@ class Diary(models.Model):
     thumbnail_video = ImageSpecField(source='image_video', processors=[ResizeToFill(200, 200)], format='JPEG', options={'quality': 60}, )
 
 
-
-
     def __str__(self):
         return f"{self.title} - {self.date}"
 
@@ -61,6 +59,8 @@ class Diary(models.Model):
 
 
     def save(self, *args, **kwargs):
+        output_folder = os.path.join(settings.BASE_DIR, 'media/video_images/')
+        os.makedirs(output_folder, exist_ok=True)  # フォルダを作成する
         if not self.image_video:  # image_video の投稿がない場合のみ実行
             super().save(*args, **kwargs)
             if self.video:
@@ -73,7 +73,10 @@ class Diary(models.Model):
                 is_success, image = cap.read()
 
                 # 読み込んだ部分を書き出す
-                output_path = os.path.join(settings.BASE_DIR, f'media/video_images/{file_name}.jpg')
+                # output_path = os.path.join(settings.BASE_DIR, f'media/video_images/{file_name}.jpg')
+                # cv2.imwrite(output_path, image)
+
+                output_path = os.path.join(output_folder, f'{file_name}.jpg')
                 cv2.imwrite(output_path, image)
 
                 # 書き出したファイルのパスを、image_videoに格納して保存
