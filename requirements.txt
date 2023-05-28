@@ -12,3 +12,4 @@ Pillow
 django_debug_toolbar==3.8.1
 django_cleanup
 django-imagekit
+opencv-python
