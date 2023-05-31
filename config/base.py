@@ -8,7 +8,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
-env.read_env(Path(BASE_DIR, '.env_sample'))
+env.read_env(Path(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 

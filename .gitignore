@@ -160,3 +160,5 @@ cython_debug/
 
 media/
 CACHE/
+
+config/settings.py
