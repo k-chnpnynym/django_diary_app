@@ -14,6 +14,7 @@
         <div>
             <h1>{{ diary.title }}</h1>
         </div>
+        <div class="mb-3"></div>  {# スペースを追加する行 #}
     </div>
 {% endblock %}
 
@@ -63,6 +64,7 @@
 {#             <a href="{{ tag.get_absolute_url }}" class="noborder badge bg-info text-wrap">{{ tag.name }}</a>#}
 {#        {% endfor %}#}
 {#    </p>#}
+
     <div class="card">
         <div class="card-header">
             <small class="text-muted">{{ diary.date|date:"Y年m月d日(D)" }}</small>
