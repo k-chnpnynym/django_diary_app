@@ -4,14 +4,6 @@
     {{ diary.title }} - {{ block.super }}
 {% endblock %}
 
-{% block styles %}
-    <style>
-        .tag {
-            font-size: 5px; /* タグのフォントサイズを小さく設定 */
-        }
-    </style>
-{% endblock %}
-
 {% block header_h1 %}
     <div class="card-header">
         <div class="tag-container">
