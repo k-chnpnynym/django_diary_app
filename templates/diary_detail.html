@@ -4,8 +4,25 @@
     {{ diary.title }} - {{ block.super }}
 {% endblock %}
 
+{% block styles %}
+    <style>
+        .tag {
+            font-size: 5px; /* タグのフォントサイズを小さく設定 */
+        }
+    </style>
+{% endblock %}
+
 {% block header_h1 %}
-    {{ diary.title }}　
+    <div class="card-header">
+        <div class="tag-container">
+            {% for tag in object.tags.all %}
+                <a href="{{ tag.get_absolute_url }}" class="noborder badge bg-info text-wrap">{{ tag.name }}</a>
+            {% endfor %}
+        </div>
+        <div>
+            <h1>{{ diary.title }}</h1>
+        </div>
+    </div>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -49,11 +66,11 @@
 {% endblock %}
 
 {% block main_content %}
-    <p>
-        {% for tag in object.tags.all %}
-             <a href="{{ tag.get_absolute_url }}" class="noborder badge bg-info text-wrap">{{ tag.name }}</a>
-        {% endfor %}
-    </p>
+{#    <p>#}
+{#        {% for tag in object.tags.all %}#}
+{#             <a href="{{ tag.get_absolute_url }}" class="noborder badge bg-info text-wrap">{{ tag.name }}</a>#}
+{#        {% endfor %}#}
+{#    </p>#}
     <div class="card">
         <div class="card-header">
             <small class="text-muted">{{ diary.date|date:"Y年m月d日(D)" }}</small>

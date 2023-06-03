@@ -16,6 +16,7 @@ div.home-img {
   height: auto;
 }
 
+
 div.article-control-area {
   margin: 20px;
 }
@@ -41,4 +42,10 @@ div.article-control-area {
 .search-icon {
   font-size: 1.1rem; /* アイコンのサイズ（例: 1.25rem） */
   color: #AAAAAA; /* アイコンの色（より薄いグレー） */
+ }
+
+
+.tag-container {
+    font-size: 20px;
+    margin: 10px 0;
  }
