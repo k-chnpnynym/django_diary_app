@@ -37,9 +37,9 @@ class Diary(models.Model):
     date = models.DateField(verbose_name='日付', default=timezone.now)
     title = models.CharField(verbose_name='タイトル', max_length=40)
     text = models.TextField(verbose_name='本文', max_length=2000, blank=True, null=True)
-    image = models.ImageField(upload_to='media/images/', verbose_name='写真', blank=True, null=True)
-    image_video = models.ImageField(upload_to='media/video_images/', verbose_name='動画のサムネイル', blank=True, null=True)
-    video = models.FileField(upload_to='media/videos/', verbose_name='動画', blank=True, null=True)  # 動画用のフィールドを追加
+    image = models.ImageField(upload_to='images/', verbose_name='写真', blank=True, null=True)
+    image_video = models.ImageField(upload_to='video_images/', verbose_name='動画のサムネイル', blank=True, null=True)
+    video = models.FileField(upload_to='videos/', verbose_name='動画', blank=True, null=True)  # 動画用のフィールドを追加
 
     secret = models.BooleanField(verbose_name='内緒', default=True)
     created_at = models.DateTimeField(verbose_name='作成日時', default=timezone.now)
@@ -58,32 +58,32 @@ class Diary(models.Model):
         return resolve_url('diary:diary_detail', pk=self.pk)
 
 
+
+    
     def save(self, *args, **kwargs):
-        output_folder = os.path.join(settings.BASE_DIR, 'media/video_images/')
+        output_folder = os.path.join(settings.MEDIA_ROOT, 'video_images/')
         os.makedirs(output_folder, exist_ok=True)  # フォルダを作成する
         if not self.image_video:  # image_video の投稿がない場合のみ実行
             super().save(*args, **kwargs)
             if self.video:
                 path = self.video.path  # ファイルの保存された場所
                 file_name = os.path.basename(path)  # ファイル名部分
-
+    
                 # opencvで1秒地点を読み込む
                 cap = cv2.VideoCapture(path)
                 cap.set(cv2.CAP_PROP_POS_MSEC, 1000)
                 is_success, image = cap.read()
-
+    
                 # 読み込んだ部分を書き出す
-                # output_path = os.path.join(settings.BASE_DIR, f'media/video_images/{file_name}.jpg')
-                # cv2.imwrite(output_path, image)
-
                 output_path = os.path.join(output_folder, f'{file_name}.jpg')
                 cv2.imwrite(output_path, image)
-
+    
                 # 書き出したファイルのパスを、image_videoに格納して保存
-                self.image_video = f'media/video_images/{file_name}.jpg'
-                self.thumbnail_video = f'media/video_images/{file_name}.jpg'
-
+                self.image_video.name = f'video_images/{file_name}.jpg'
+                self.thumbnail_video.name = f'video_images/{file_name}.jpg'
+    
         super().save(*args, **kwargs)
+
 
 
 

@@ -81,6 +81,7 @@
             <div class="form-group col-md-4">
                 <label for="num_diaries" class="bg-light"><strong>1ページあたりの日記の表示数：</strong></label>
                 <select name="num_diaries" id="num_diaries" class="form-control">
+                    <option value="1" {% if num_diaries == '1' %} selected {% endif %}>1</option>
                     <option value="6" {% if num_diaries == '6' %} selected {% endif %}>6</option>
                     <option value="8" {% if num_diaries == '8' %} selected {% endif %}>8</option>
                     <option value="10" {% if num_diaries == '10' %} selected {% endif %}>10</option>
@@ -180,6 +181,8 @@
                 </li>
             {% endif %}
           </ul>
+	  <br>
+	  <br>
         </nav>
     {% endif %}
 

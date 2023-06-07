@@ -11,4 +11,3 @@ django-environ
 Pillow
 django_cleanup
 django-imagekit
-opencv-python
