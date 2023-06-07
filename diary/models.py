@@ -48,6 +48,7 @@ class Diary(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='タグ')
     thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(200, 200)], format='JPEG',options={'quality': 60}, )
     thumbnail_video = ImageSpecField(source='image_video', processors=[ResizeToFill(200, 200)], format='JPEG', options={'quality': 60}, )
+    thumbnail_video_detail = ImageSpecField(source='image_video', processors=[ResizeToFill(400, 400)], format='JPEG', options={'quality': 60}, )
 
 
     def __str__(self):
