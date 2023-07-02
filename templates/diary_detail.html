@@ -75,23 +75,11 @@
         {% endif %}
         {% if object.video %}
      	    <div class="ratio ratio-1x1">
-{#                <video controls poster="{{diary.image_video.url}}">#}
                 <video controls poster="{{diary.thumbnail_video_detail.url}}">
                     <source src="{{ object.video.url }}" type="video/mp4">
                         このブラウザはビデオタグをサポートしていません。
                 </video>
             </div>
-{#            <style>#}
-{#                .video-wrapper video{#}
-{#                min-width:100%;#}
-{#                min-height:100vh;#}
-{#                }#}
-{#            </style>#}
-            <!--<video poster="{{ diary.image_video.url }}" controls>
-            #    <source src="{{ object.video.url }}" type="video/mp4">
-                このブラウザはビデオタグをサポートしていません。
-            #</video>
-	    -->
         {% endif %}
         <div class="card-body">
             <p class="card-text">{{ diary.text|linebreaksbr }}</p>
