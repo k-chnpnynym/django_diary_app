@@ -80,7 +80,7 @@ class Diary(models.Model):
     
                 # 書き出したファイルのパスを、image_videoに格納して保存
                 self.image_video.name = f'video_images/{file_name}.jpg'
-                self.thumbnail_video.name = f'video_images/{file_name}.jpg'
+                self.thumbnail_video.name = f'thumbnail_video_images/{file_name}.jpg'
                 self.thumbnail_video_detail.name = f'video_images/{file_name}_detail.jpg'
         super().save(*args, **kwargs)
 
