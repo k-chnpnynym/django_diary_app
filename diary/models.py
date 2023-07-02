@@ -64,6 +64,7 @@ class Diary(models.Model):
         output_folder = os.path.join(settings.MEDIA_ROOT, 'video_images/')
         os.makedirs(output_folder, exist_ok=True)  # フォルダを作成する
         if not self.image_video:  # image_video の投稿がない場合のみ実行
+            super().save(*args, **kwargs)
             if self.video:
                 path = self.video.path  # ファイルの保存された場所
                 file_name = os.path.basename(path)  # ファイル名部分
