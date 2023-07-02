@@ -63,7 +63,7 @@ class Diary(models.Model):
     def save(self, *args, **kwargs):
         output_folder = os.path.join(settings.MEDIA_ROOT, 'video_images/')
         os.makedirs(output_folder, exist_ok=True)  # フォルダを作成する
-        if self.video and not self.image_video:  # image_video の投稿がない場合のみ実行
+        if not self.image_video:  # image_video の投稿がない場合のみ実行
             super().save(*args, **kwargs)
             if self.video:
                 path = self.video.path  # ファイルの保存された場所
@@ -80,7 +80,7 @@ class Diary(models.Model):
     
                 # 書き出したファイルのパスを、image_videoに格納して保存
                 self.image_video.name = f'video_images/{file_name}.jpg'
-                self.thumbnail_video.name = f'thumbnail_video_images/{file_name}.jpg'
+                self.thumbnail_video.name = f'video_images/{file_name}_thumbnail.jpg'
                 self.thumbnail_video_detail.name = f'video_images/{file_name}_detail.jpg'
         super().save(*args, **kwargs)
 
