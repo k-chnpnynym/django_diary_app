@@ -1,3 +1,4 @@
+import logging
 import os
 import uuid
 
@@ -9,6 +10,9 @@ from django.urls import reverse
 from django.utils import timezone
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
+
+
+logger = logging.getLogger(__name__)
 
 
 class Tag(models.Model):
@@ -61,28 +65,42 @@ class Diary(models.Model):
 
 
     def save(self, *args, **kwargs):
+        logger.info('Article.save method called')
         output_folder = os.path.join(settings.MEDIA_ROOT, 'video_images/')
         os.makedirs(output_folder, exist_ok=True)  # フォルダを作成する
+        if self.image or self.image_video:
+            super().save(*args, **kwargs)
+            logger.info('diary save end')
         if not self.image and not self.image_video:  # image_video の投稿がない場合のみ実行
             super().save(*args, **kwargs)
+            logger.info('Article.save super().save success')
             if self.video:
                 path = self.video.path  # ファイルの保存された場所
                 file_name = os.path.basename(path)  # ファイル名部分
+                logger.info('Article.save file_name=%s.', file_name)
 
                 # opencvで1秒地点を読み込む
                 cap = cv2.VideoCapture(path)
+                logger.info('Article.save cap created')
                 cap.set(cv2.CAP_PROP_POS_MSEC, 1000)
+                logger.info('Article.save set success')
                 is_success, image = cap.read()
+                logger.info('Article.save cap.read() is_success=%s.', is_success)
 
                 # 読み込んだ部分を書き出す
                 output_path = os.path.join(output_folder, f'{file_name}.jpg')
                 cv2.imwrite(output_path, image)
+                logger.info('Article.save output_path output_path=%s.', output_path)
 
                 # 書き出したファイルのパスを、image_videoに格納して保存
                 self.image_video.name = f'video_images/{file_name}.jpg'
                 self.thumbnail_video.name = f'video_images/{file_name}_thumbnail.jpg'
                 self.thumbnail_video_detail.name = f'video_images/{file_name}_detail.jpg'
-        super().save(*args, **kwargs)
+                logger.info('Article.save self.image_video.name self.image_video.name=%s.', self.image_video.name)
+                logger.info('Article.save self.thumbnail_video.name self.thumbnail_video.name=%s.', self.thumbnail_video.name)
+                logger.info('Article.save self.thumbnail_video_detail.name self.thumbnail_video_detail.name=%s.', self.thumbnail_video_detail.name)
+    
+
 
  
      

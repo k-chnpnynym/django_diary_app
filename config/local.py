@@ -20,6 +20,55 @@ ALLOWED_HOSTS = []
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+LOGGING = {
+    'version': 1,  # バージョンは「1」固定
+    'disable_existing_loggers': False,  # 既存のログ設定を無効化しない
+
+    # ログフォーマット
+    'formatters': {
+        'develop': {  # 開発用
+            'format': '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d '
+                      '%(message)s'
+        },
+    },
+
+    # ハンドラ
+    'handlers': {
+        'console': {  # コンソール出力用ハンドラ
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'develop',
+        },
+    },
+
+    # ロガー
+    'loggers': {
+        '': {  # 自作アプリケーション全般のログを拾うロガー
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'django': {  # Django本体が出すログ全般を拾うロガー
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        # 'django.db.backends': {  # 発行されるSQL文を出力するための設定
+        #     'handlers': ['console'],
+        #     'level': 'DEBUG',
+        #     'propagate': False,
+        # },
+    },
+}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

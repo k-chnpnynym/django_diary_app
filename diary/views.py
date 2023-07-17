@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -9,6 +11,9 @@ from django.views.generic import TemplateView, CreateView, ListView, DetailView,
 
 from .forms import DiaryForm, DiaryStaffForm, DiaryCommentForm
 from .models import Diary, Tag, Comment
+
+
+logger = logging.getLogger(__name__)
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -33,10 +38,14 @@ class DiaryCreateView(LoginRequiredMixin, CreateView):
             diary.secret = False
         diary.save()
         messages.success(self.request, '日記を投稿しました。')
+        logger.info('before: diary create: user=%s title=%s', self.request.user.email, form.instance.title)
+        result = super().form_valid(form)
+        logger.info('after  :diary create: user=%s id=%s', self.request.user.email, self.object.id)
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(self.request, '日記を投稿できませんでした。')
+        logger.warning('diary create failed: %s', self.request.user.email, form.instance.title)
         return super().form_invalid(form)
 
 
@@ -184,12 +193,14 @@ class DiaryUpdateView(LoginRequiredMixin, UpdateView):
         diary.updated_at = timezone.now()
         diary.save()
         messages.success(self.request, '日記を編集しました。')
+        logger.info('before: diary update: user=%s id=%s', self.request.user.email, self.object.id)
 
         return super().form_valid(form)
 
 
     def form_invalid(self, form):
         messages.error(self.request, '日記を編集できませんでした。')
+        logger.warning('diary update failed: %s', self.request.user.email, self.object.id)
         return super().form_invalid(form)
 
 
@@ -212,6 +223,7 @@ class DiaryDeleteView(LoginRequiredMixin, DeleteView):
 
     def form_valid(self, form):
         messages.success(self.request, '日記を削除しました。')
+        logger.info('before: diary delete: user=%s id=%s', self.request.user.email, self.object.id)
         return super().form_valid(form)
 
     def get_success_url(self):
