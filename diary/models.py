@@ -49,7 +49,7 @@ class Diary(models.Model):
     updated_at = models.DateTimeField(verbose_name='編集日時', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='タグ')
-    thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(200, 200)], format='JPEG',options={'quality': 60}, )
+    thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(200, 200)], format='JPEG', options={'quality': 60}, )
     thumbnail_video = ImageSpecField(source='image_video', processors=[ResizeToFill(200, 200)], format='JPEG', options={'quality': 60}, )
     thumbnail_video_detail = ImageSpecField(source='image_video', processors=[ResizeToFill(400, 400)], format='JPEG', options={'quality': 60}, )
 
@@ -68,9 +68,6 @@ class Diary(models.Model):
         logger.info('Article.save method called')
         output_folder = os.path.join(settings.MEDIA_ROOT, 'video_images/')
         os.makedirs(output_folder, exist_ok=True)  # フォルダを作成する
-        if self.image or self.image_video:
-            super().save(*args, **kwargs)
-            logger.info('diary save end')
         if not self.image and not self.image_video:  # image_video の投稿がない場合のみ実行
             super().save(*args, **kwargs)
             logger.info('Article.save super().save success')
@@ -99,11 +96,11 @@ class Diary(models.Model):
                 logger.info('Article.save self.image_video.name self.image_video.name=%s.', self.image_video.name)
                 logger.info('Article.save self.thumbnail_video.name self.thumbnail_video.name=%s.', self.thumbnail_video.name)
                 logger.info('Article.save self.thumbnail_video_detail.name self.thumbnail_video_detail.name=%s.', self.thumbnail_video_detail.name)
-    
+        super().save(*args, **kwargs)
+        logger.info('diary save end')
 
 
- 
-     
+
 
 
 
