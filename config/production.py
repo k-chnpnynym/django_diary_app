@@ -1,5 +1,8 @@
 from .base import *
 
+import os
+import boto3
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = env('EMAIL_HOST')
@@ -18,6 +21,9 @@ ALLOWED_HOSTS = [env('ALLOWED_HOSTS'), ]
 ##################
 # AWS settings #
 ##################
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
 ##################
 # Static files #
