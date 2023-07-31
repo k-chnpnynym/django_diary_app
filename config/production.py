@@ -14,8 +14,30 @@ DEBUG = False
 
 ALLOWED_HOSTS = [env('ALLOWED_HOSTS'), ]
 
-STATIC_ROOT = '/var/www/mysite/static'
-MEDIA_ROOT = '/var/www/mysite/media'
+
+##################
+# AWS settings #
+##################
+
+##################
+# Static files #
+##################
+
+# STATIC_ROOT = '/var/www/mysite/static'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = 'mysite-static-storage-sumiteru'
+AWS_DEFAULT_ACL = None
+
+
+##################
+# Media files #
+##################
+
+# MEDIA_ROOT = '/var/www/mysite/media'
+DEFAULT_FILE_STORAGE = 'config.storage_backends.S3MediaStorage'
+MEDIA_AWS_STORAGE_BUCKET_NAME = 'mysite-media-storage-sumiteru'
+MEDIA_AWS_DEFAULT_ACL = None
+
 
 DATABASES = {
     'default': {
@@ -58,3 +80,6 @@ LOGGING = {
         },
     },
 }
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440 * 10 * 10  # 2.5M×10=250M
+FILE_UPLOAD_PERMISSIONS = 0o777
