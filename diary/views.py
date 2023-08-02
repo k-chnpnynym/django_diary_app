@@ -40,7 +40,7 @@ class DiaryCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, '日記を投稿しました。')
         logger.info('before: diary create: user=%s title=%s', self.request.user.email, form.instance.title)
         logger.info('after  :diary create: user=%s id=%s', self.request.user.email, self.object.id)
-        return redirect(self.get_success_url())
+        return redirect(self.success_url)
 
     def form_invalid(self, form):
         messages.error(self.request, '日記を投稿できませんでした。')
