@@ -96,10 +96,10 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{ diary.title }}</h5>
-                            {% if diary.thumbnail %}
-                                <img src="{{ diary.thumbnail.url }}" class="img-fluid">
-                            {% elif diary.thumbnail_video %}
-                                <img src="{{ diary.thumbnail_video.url }}" class="img-fluid">
+                            {% if diary.image %}
+                                <img src="{{ diary.image.url }}" class="img-fluid">
+                            {% elif diary.image_video %}
+                                <img src="{{ diary.image_video.url }}" class="img-fluid">
                             {% endif %}
                             <p class="card-text">{{ diary.text|truncatechars:50 }}</p>
                             <a href="{{ diary.get_absolute_url }}" class="btn btn-primary">詳細を見る</a>
