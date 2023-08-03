@@ -49,9 +49,9 @@ class Diary(models.Model):
     updated_at = models.DateTimeField(verbose_name='編集日時', blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)
     tags = models.ManyToManyField(Tag, blank=True, verbose_name='タグ')
-    thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(200, 200)], format='JPEG', options={'quality': 60}, )
-    thumbnail_video = ImageSpecField(source='image_video', processors=[ResizeToFill(200, 200)], format='JPEG', options={'quality': 60}, )
-    thumbnail_video_detail = ImageSpecField(source='image_video', processors=[ResizeToFill(400, 400)], format='JPEG', options={'quality': 60}, )
+    # thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(200, 200)], format='JPEG', options={'quality': 60}, )
+    # thumbnail_video = ImageSpecField(source='image_video', processors=[ResizeToFill(200, 200)], format='JPEG', options={'quality': 60}, )
+    # thumbnail_video_detail = ImageSpecField(source='image_video', processors=[ResizeToFill(400, 400)], format='JPEG', options={'quality': 60}, )
 
 
     def __str__(self):
@@ -96,10 +96,10 @@ class Diary(models.Model):
                 logger.info('Diary.save self.image_video.name self.image_video.name=%s.', self.image_video.name)
                 logger.info('Diary.save self.thumbnail_video.name self.thumbnail_video.name=%s.', self.thumbnail_video.name)
                 logger.info('Diary.save self.thumbnail_video_detail.name self.thumbnail_video_detail.name=%s.', self.thumbnail_video_detail.name)
-        logger.info('Diary.save self.thumbnail.name self.thumbnail.name=%s.', self.thumbnail.name)
+        # logger.info('Diary.save self.thumbnail.name self.thumbnail.name=%s.', self.thumbnail.name)
         logger.info('Diary.save self.image_video.name self.image_video.name=%s.', self.image_video.name)
-        logger.info('Diary.save self.thumbnail_video.name self.thumbnail_video.name=%s.', self.thumbnail_video.name)
-        logger.info('Diary.save self.thumbnail_video_detail.name self.thumbnail_video_detail.name=%s.', self.thumbnail_video_detail.name)
+        # logger.info('Diary.save self.thumbnail_video.name self.thumbnail_video.name=%s.', self.thumbnail_video.name)
+        # logger.info('Diary.save self.thumbnail_video_detail.name self.thumbnail_video_detail.name=%s.', self.thumbnail_video_detail.name)
         super().save(*args, **kwargs)
         logger.info('diary save end')
 
