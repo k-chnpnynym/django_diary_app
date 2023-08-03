@@ -37,8 +37,9 @@ class DiaryCreateView(LoginRequiredMixin, CreateView):
         if not self.request.user.is_staff:
             diary.secret = False
         diary.save()
+        tags = form.cleaned_data['tags']  # フォームから選択されたタグを取得
+        diary.tags.set(tags)  # Diaryオブジェクトにタグを関連付ける
         messages.success(self.request, '日記を投稿しました。')
-
         return redirect(self.success_url)
 
     def form_invalid(self, form):
